@@ -27,20 +27,29 @@ const userSchema = new mongoose.Schema({
     type: String,
     trim: true,
   },
-  passwordVault: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "passwordVault",
-  },
   twoFactorAuth: {
     type: Boolean,
     default: false,
   },
-  backupCode:{
+  passwordVault: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "passwordVault",
+  },
+  secureNotes: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "secureNotes",
+  },
+  backupCode: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "backupCode",
   },
   token: {
     type: String,
   },
+  // accountType: {
+  //   type: String,
+  //   default: "user",
+  //   select: false,
+  // },
 });
 module.exports = mongoose.model("user", userSchema);
