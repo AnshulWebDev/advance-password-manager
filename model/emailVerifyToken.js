@@ -3,6 +3,7 @@ const mongoose = require("mongoose");
 const emailVerifyTokenSchema = new mongoose.Schema({
   email: {
     type: String,
+    trim: true,
   },
   token: {
     type: String,
