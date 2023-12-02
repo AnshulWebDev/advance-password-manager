@@ -3,13 +3,16 @@ import mongoose from "mongoose";
 const userSchema = new mongoose.Schema({
   firstName: {
     type: String,
+    trim: true,
   },
   lastName: {
     type: String,
+    trim: true,
   },
   email: {
     type: String,
     unique: true,
+    trim: true,
   },
   isEmailVerify: {
     type: Boolean,
@@ -17,9 +20,12 @@ const userSchema = new mongoose.Schema({
   },
   password: {
     type: String,
+    trim: true,
+    select: false,
   },
   profileImg: {
     type: String,
+    trim: true,
   },
   passwordVault: {
     type: mongoose.Schema.Types.ObjectId,
