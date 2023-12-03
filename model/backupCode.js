@@ -45,4 +45,4 @@ const backupCodeSchema = new mongoose({
   },
 });
 
-module.exports = mongoose.model("backupCode", backupCodeSchema);
+export const backupCode = mongoose.model("backupCode", backupCodeSchema);
