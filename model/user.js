@@ -45,6 +45,8 @@ const userSchema = new mongoose.Schema({
   },
   token: {
     type: String,
+    default: Date.now(),
+    expires: 6 * 60 * 60,
   },
   // accountType: {
   //   type: String,
@@ -52,4 +54,5 @@ const userSchema = new mongoose.Schema({
   //   select: false,
   // },
 });
-module.exports = mongoose.model("user", userSchema);
+mongoose.models = {};
+export const User = mongoose.model("user", userSchema);

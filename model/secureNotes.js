@@ -12,4 +12,4 @@ const secureNotesSchema = new mongoose.Schema({
     type: String,
   },
 });
-module.exports = mongoose.model("secureNotes", secureNotesSchema);
+export const secureNotes = mongoose.model("secureNotes", secureNotesSchema);

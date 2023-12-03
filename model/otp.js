@@ -1,12 +1,13 @@
 const mongoose = require("mongoose");
 
-const emailVerifyTokenSchema = new mongoose.Schema({
+const otpSchema = new mongoose.Schema({
   email: {
     type: String,
-    trim: true,
+    required: true,
   },
-  token: {
+  otp: {
     type: String,
+    required: true,
   },
   createdAt: {
     type: Date,
@@ -14,4 +15,5 @@ const emailVerifyTokenSchema = new mongoose.Schema({
     expires: 15 * 60,
   },
 });
-export const emailVerify = mongoose.model("emailVerifyToken", emailVerifyTokenSchema);
+
+export const otp = mongoose.model("OTP", otpSchema);
