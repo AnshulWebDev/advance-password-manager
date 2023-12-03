@@ -101,7 +101,7 @@ export const POST = async (req) => {
 
       Please use the verification code below to sign in.
       
-      <strong style="font-size: 130%">${OTP}</strong>
+      <strong>${OTP}</strong>
       
       If you didn’t request this, you can ignore this email.
       
