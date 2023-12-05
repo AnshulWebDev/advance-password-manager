@@ -1,8 +1,8 @@
 import { NextResponse } from "next/server";
 import { connectDB } from "../../../../../../utils/dbconnect";
-import User from "../../../../../../model/user";
+import { User as User } from "../../../../../../model/user";
 import Jwt from "jsonwebtoken";
-import OTP from "../../../../../../model/otp";
+import { otp as OTP } from "../../../../../../model/otp";
 export const POST = async (req) => {
   try {
     await connectDB();
@@ -15,7 +15,8 @@ export const POST = async (req) => {
       );
     }
     const decode = Jwt.verify(cookiesValue, process.env.JWT_SECRET);
-    const recentOtp = await OTP.findOne({ email: decode.data.email })
+    // console.log(decode);
+    const recentOtp = await OTP.findOne({ email: decode.email })
       .sort({ createdAt: -1 })
       .limit(1);
 
@@ -31,14 +32,14 @@ export const POST = async (req) => {
         { status: 406 }
       );
     }
-
+    
     await User.create({
-      firstName: decode.data.firstName,
-      lastName: decode.data.lastName,
-      email: decode.data.email,
+      firstName: decode.firstName,
+      lastName: decode.lastName,
+      email: decode.email,
       isEmailVerify: true,
-      password: decode.data.password,
-      profileImg: decode.data,
+      password: decode.password,
+      profileImg: "url",
     });
     return NextResponse.json(
       { success: true, message: "Account create successfully" },
