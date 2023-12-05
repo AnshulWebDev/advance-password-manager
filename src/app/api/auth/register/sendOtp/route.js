@@ -12,29 +12,30 @@ export const POST = async (req) => {
     await connectDB();
     const { firstName, lastName, email, confirmPassword, password } =
       await req.json();
+      
     //check input validation is in correct format
     if (!firstName || !lastName || !email || !password || !confirmPassword) {
       return NextResponse.json(
-        { success: false, message: "Enter all fields" },
+        { success: false, message: "Please fill in all required fields." },
         { status: 402 }
       );
     } else if (!validator.isAlpha(firstName, "en-US", { ignore: " " })) {
       // Use isAlpha from the validator library to check if the name contains only alphabets
       return NextResponse.json(
-        { success: false, message: "first name should only contain alphabets" },
+        { success: false, message: "first name should only contain alphabets." },
         { status: 402 }
       );
     } else if (!validator.isAlpha(lastName, "en-US", { ignore: " " })) {
       // Use isAlpha from the validator library to check if the name contains only alphabets
       return NextResponse.json(
-        { success: false, message: "first name should only contain alphabets" },
+        { success: false, message: "last name should only contain alphabets." },
         { status: 402 }
       );
-    } else if (confirmPassword.length >= 8) {
+    } else if (confirmPassword.length < 8) {
       return NextResponse.json(
         {
           success: false,
-          message: "Password is too short. minimum length is 8",
+          message: "Password is too short. minimum length is 8.",
         },
         { status: 401 }
       );
@@ -43,7 +44,7 @@ export const POST = async (req) => {
         {
           success: false,
           message:
-            "Invalid credentials. Please check your username and password",
+            "Password and Confirm Password must match.",
         },
         { status: 401 }
       );
@@ -51,7 +52,7 @@ export const POST = async (req) => {
       return NextResponse.json(
         {
           success: false,
-          message: "Enter valid email id",
+          message: "Enter valid email id.",
         },
         { status: 401 }
       );
@@ -101,7 +102,7 @@ export const POST = async (req) => {
 
       Please use the verification code below to sign in.
       
-      <strong>${OTP}</strong>
+      ${OTP}
       
       If you didn’t request this, you can ignore this email.
       
@@ -125,6 +126,12 @@ export const POST = async (req) => {
     return response;
   } catch (error) {
     console.log(error.message);
+    if (error.message === "Body is unusable" || "Unexpected end of JSON input") {
+      return NextResponse.json(
+        { success: false, message: "Data can't be empty" },
+        { status: 406 }
+      );
+    }
     return NextResponse.json(
       { success: false, message: "Internal server error Try Again" },
       { status: 500 }
