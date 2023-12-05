@@ -44,15 +44,12 @@ const userSchema = new mongoose.Schema({
     ref: "backupCode",
   },
   token: {
-    type: String,
-    default: Date.now(),
-    expires: 6 * 60 * 60,
+    value: {
+      type: String,
+      create: Date,
+      to: Date,
+    },
   },
-  // accountType: {
-  //   type: String,
-  //   default: "user",
-  //   select: false,
-  // },
 });
 mongoose.models = {};
 export const User = mongoose.model("user", userSchema);
