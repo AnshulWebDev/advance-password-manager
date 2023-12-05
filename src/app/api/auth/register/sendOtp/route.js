@@ -12,7 +12,7 @@ export const POST = async (req) => {
     await connectDB();
     const { firstName, lastName, email, confirmPassword, password } =
       await req.json();
-      
+
     //check input validation is in correct format
     if (!firstName || !lastName || !email || !password || !confirmPassword) {
       return NextResponse.json(
@@ -22,7 +22,10 @@ export const POST = async (req) => {
     } else if (!validator.isAlpha(firstName, "en-US", { ignore: " " })) {
       // Use isAlpha from the validator library to check if the name contains only alphabets
       return NextResponse.json(
-        { success: false, message: "first name should only contain alphabets." },
+        {
+          success: false,
+          message: "first name should only contain alphabets.",
+        },
         { status: 402 }
       );
     } else if (!validator.isAlpha(lastName, "en-US", { ignore: " " })) {
@@ -43,8 +46,7 @@ export const POST = async (req) => {
       return NextResponse.json(
         {
           success: false,
-          message:
-            "Password and Confirm Password must match.",
+          message: "Password and Confirm Password must match.",
         },
         { status: 401 }
       );
@@ -112,7 +114,14 @@ export const POST = async (req) => {
 
     const response = NextResponse.json(
       { success: true, message: "otp send successfully" },
-      { status: 200 }
+      {
+        status: 200,
+        headers: {
+          "Access-Control-Allow-Origin": "*",
+          "Access-Control-Allow-Methods": "POST, PUT, DELETE, OPTIONS",
+          "Access-Control-Allow-Headers": "Content-Type, Authorization",
+        },
+      }
     );
 
     //set user details to cookies
@@ -126,7 +135,10 @@ export const POST = async (req) => {
     return response;
   } catch (error) {
     console.log(error.message);
-    if (error.message === "Body is unusable" || "Unexpected end of JSON input") {
+    if (
+      error.message === "Body is unusable" ||
+      "Unexpected end of JSON input"
+    ) {
       return NextResponse.json(
         { success: false, message: "Data can't be empty" },
         { status: 406 }
