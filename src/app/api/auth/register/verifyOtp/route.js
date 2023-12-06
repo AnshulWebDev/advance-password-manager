@@ -3,6 +3,7 @@ import { connectDB } from "../../../../../../utils/dbconnect";
 import { User as User } from "../../../../../../model/user";
 import Jwt from "jsonwebtoken";
 import { otp as OTP } from "../../../../../../model/otp";
+
 export const POST = async (req) => {
   try {
     await connectDB();
@@ -15,6 +16,12 @@ export const POST = async (req) => {
       );
     }
     const decode = Jwt.verify(cookiesValue, process.env.JWT_SECRET);
+    if (!decode) {
+      return NextResponse.json(
+        { success: false, message: "unable to verify" },
+        { status: 406 }
+      );
+    }
     // console.log(decode);
     const recentOtp = await OTP.findOne({ email: decode.email })
       .sort({ createdAt: -1 })
@@ -32,14 +39,13 @@ export const POST = async (req) => {
         { status: 406 }
       );
     }
-    
     await User.create({
       firstName: decode.firstName,
       lastName: decode.lastName,
       email: decode.email,
       isEmailVerify: true,
       password: decode.password,
-      profileImg: "url",
+      profileImg: `https://api.dicebear.com/7.x/fun-emoji/png?seed=${decode.firstName}`,
     });
     return NextResponse.json(
       { success: true, message: "Account create successfully" },
@@ -47,6 +53,15 @@ export const POST = async (req) => {
     );
   } catch (error) {
     console.log(error.message);
+    if (
+      error.message === "Body is unusable" ||
+      error.message === "Unexpected end of JSON input"
+    ) {
+      return NextResponse.json(
+        { success: false, message: "Data can't be empty" },
+        { status: 406 }
+      );
+    }
     return NextResponse.json(
       { success: false, message: "Internal server error Try Again" },
       { status: 500 }
