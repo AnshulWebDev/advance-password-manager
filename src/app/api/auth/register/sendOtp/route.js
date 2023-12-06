@@ -12,7 +12,7 @@ export const POST = async (req) => {
     await connectDB();
     const { firstName, lastName, email, confirmPassword, password } =
       await req.json();
-
+    const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*])(?=.{8,})/;
     //check input validation is in correct format
     if (!firstName || !lastName || !email || !password || !confirmPassword) {
       return NextResponse.json(
@@ -42,11 +42,20 @@ export const POST = async (req) => {
         },
         { status: 401 }
       );
+    } else if (!passwordRegex.test(password)) {
+      return NextResponse.json(
+        {
+          success: false,
+          message:
+            "Password must contain at least one lowercase letter, one uppercase letter, and one special symbol.",
+        },
+        { status: 402 }
+      );
     } else if (confirmPassword !== password) {
       return NextResponse.json(
         {
           success: false,
-          message: "Password and Confirm Password must match.",
+          message: "Password and Confirm Password is not equal.",
         },
         { status: 401 }
       );
