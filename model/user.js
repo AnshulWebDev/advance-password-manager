@@ -42,7 +42,6 @@ const userSchema = new mongoose.Schema({
     lastAttemptTime: {
       type: Date,
       default: Date.now(),
-      expires: "30m", // Automatically delete entries after 30 minutes
     },
   },
   accountLock: {
@@ -58,4 +57,6 @@ const userSchema = new mongoose.Schema({
     ref: "secureNotes",
   },
 });
-export const User = mongoose.model("user", userSchema);
+
+mongoose.models = {};
+export const user = mongoose.model("user", userSchema);
