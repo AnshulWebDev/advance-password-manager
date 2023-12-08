@@ -16,7 +16,7 @@ export const mailSender = async (email, title, body) => {
       from: process.env.SMTP_MAIL,
       to: `${email}`,
       subject: `${title}`,
-      text: `${body}`,
+      html: `${body}`,
     });
 
     // console.log(info);
