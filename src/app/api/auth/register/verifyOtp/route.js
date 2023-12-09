@@ -124,7 +124,6 @@ export const POST = async (req) => {
           <h2>Key Features:</h2>
           <ul>
             <li>Generate unique Passwords</li>
-            <li>Two Factor Authentication</li>
             <li>Overall safety score</li>
             <li>No forgot password policy</li>
             <li>Login Alert!</li>
