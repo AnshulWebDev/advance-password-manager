@@ -11,6 +11,10 @@ const secureNotesSchema = new mongoose.Schema({
   notes: {
     type: String,
   },
+  encrypt: {
+    type: Boolean,
+    default: false,
+  },
 });
 mongoose.models = {};
 export const secureNotes = mongoose.model("securenotes", secureNotesSchema);
