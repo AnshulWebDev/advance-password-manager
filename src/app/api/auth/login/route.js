@@ -184,7 +184,7 @@ export const POST = async (req) => {
         value: token,
         httpOnly: true,
         path: "/",
-        maxAge: 6 * 60 * 60 * 1000,
+        maxAge: 60 * 60 * 1000,
       });
       return response;
     }
