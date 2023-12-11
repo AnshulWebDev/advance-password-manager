@@ -10,8 +10,14 @@ export const POST = async (req, { params }) => {
     const { vaultPin } = await req.json();
     const token = await req.cookies.get("token")?.value;
     const user = await User.findOne({ token });
-    if (!user._id) {
-      return NextResponse.redirect("/login");
+    if (!user) {
+      return NextResponse.json(
+        {
+          success: false,
+          message: "session expire Login again",
+        },
+        { status: 404 }
+      );
     } else if (!vaultPin || vaultPin.toString().length !== 6) {
       return NextResponse.json(
         { success: false, message: "Enter a 6-digit number vault pin" },
