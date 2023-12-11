@@ -184,7 +184,7 @@ export const POST = async (req) => {
         value: token,
         httpOnly: true,
         path: "/",
-        maxAge: 60 * 60 * 1000,
+        maxAge: 11.5 * 60 * 60, // 6 hours expiry
       });
       return response;
     }
