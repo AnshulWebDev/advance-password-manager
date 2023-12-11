@@ -27,10 +27,6 @@ const userSchema = new mongoose.Schema({
     type: String,
     trim: true,
   },
-  twoFactorAuth: {
-    type: Boolean,
-    default: false,
-  },
   token: {
     type: String,
   },
@@ -48,14 +44,19 @@ const userSchema = new mongoose.Schema({
     type: Boolean,
     default: false,
   },
+  vaultPin: {
+    type: String,
+  },
   passwordVault: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "passwordVault",
   },
-  secureNotes: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "secureNotes",
-  },
+  secureNotes: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "securenotes",
+    },
+  ],
 });
 
 mongoose.models = {};
