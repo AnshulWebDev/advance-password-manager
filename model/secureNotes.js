@@ -13,4 +13,4 @@ const secureNotesSchema = new mongoose.Schema({
   },
 });
 mongoose.models = {};
-export const secureNotes = mongoose.model("secureNotes", secureNotesSchema);
+export const secureNotes = mongoose.model("securenotes", secureNotesSchema);
