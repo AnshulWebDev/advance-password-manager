@@ -8,12 +8,18 @@ export const DELETE = async (req, { params }) => {
     const token = await req.cookies.get("token")?.value;
     const user = await User.findOne({ token }).populate("secureNotes");
     if (!user) {
-      return NextResponse.redirect("/login");
+      return NextResponse.json(
+        {
+          success: false,
+          message: "session expire Login again",
+        },
+        { status: 404 }
+      );
     }
     try {
       await secureNotes.findByIdAndDelete(params.id);
       await User.updateOne(
-        { _id: user._id }, 
+        { _id: user._id },
         {
           $pull: { secureNotes: params.id },
         },
