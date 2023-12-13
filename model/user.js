@@ -47,10 +47,15 @@ const userSchema = new mongoose.Schema({
   vaultPin: {
     type: String,
   },
-  passwordVault: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "passwordVault",
+  vaultAuth: {
+    type: String,
   },
+  passwordVault: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "passwordVault",
+    },
+  ],
   secureNotes: [
     {
       type: mongoose.Schema.Types.ObjectId,
