@@ -18,6 +18,22 @@ const passwordVault = new mongoose.Schema({
     type: String,
     trim: true,
   },
+  Updated: {
+    type: String,
+    trim: true,
+  },
+  Created: {
+    type: String,
+    trim: true,
+  },
+  passwordUpdated: {
+    type: String,
+    trim: true,
+  },
+  passwordHistory: {
+    type: Number,
+    trim: true,
+  },
 });
 mongoose.models = {};
 export const passwordvault = mongoose.model("passwordVault", passwordVault);
