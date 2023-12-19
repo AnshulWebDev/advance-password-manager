@@ -2,7 +2,6 @@ import { NextResponse } from "next/server";
 import { user as User } from "../../../../../model/user";
 import { connectDB } from "../../../../../utils/dbconnect";
 import bcrypt from "bcrypt";
-import Jwt from "jsonwebtoken";
 
 export const POST = async (req) => {
   try {
@@ -34,19 +33,6 @@ export const POST = async (req) => {
         { status: 402 }
       );
     }
-    const payload = {
-      authPin: true,
-      validfrom: Date.now(),
-      authExp: Date.now() + 15 * 60 * 1000,
-    };
-    const vaultPinAuth = await Jwt.sign(payload, process.env.JWT_SECRET, {
-      expiresIn: "1h",
-    });
-    await User.findByIdAndUpdate(
-      user._id,
-      { vaultAuth: vaultPinAuth },
-      { new: true }
-    );
     return NextResponse.json(
       { success: true, message: "Successfull" },
       { status: 200 }
