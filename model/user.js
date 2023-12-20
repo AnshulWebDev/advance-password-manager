@@ -62,6 +62,10 @@ const userSchema = new mongoose.Schema({
       ref: "securenotes",
     },
   ],
+  role: {
+    type: String,
+    default: "user",
+  },
 });
 
 mongoose.models = {};
