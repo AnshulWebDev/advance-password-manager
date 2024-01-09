@@ -1,10 +1,10 @@
 import { NextResponse } from "next/server";
-import { user } from "../../../../../model/user";
-import { connectDB } from "../../../../../utils/dbconnect";
+import { user } from "../../../../model/user";
+import { connectDB } from "../../../../utils/dbconnect";
 import validator from "validator";
 import bcrypt from "bcrypt";
 import Jwt from "jsonwebtoken";
-import { mailSender } from "../../../../../utils/mailSender";
+import { mailSender } from "../../../../utils/mailSender";
 
 export const POST = async (req) => {
   try {

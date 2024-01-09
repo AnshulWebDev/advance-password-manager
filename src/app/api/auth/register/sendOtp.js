@@ -1,12 +1,12 @@
 import { NextResponse } from "next/server";
-import { connectDB } from "../../../../../../utils/dbconnect";
-import { user } from "../../../../../../model/user";
+import { connectDB } from "../../../../../utils/dbconnect";
+import { user } from "../../../../../model/user";
 import bcrypt from "bcrypt";
 import validator from "validator";
-import { mailSender } from "../../../../../../utils/mailSender";
+import { mailSender } from "../../../../../utils/mailSender";
 import otpGenerator from "otp-generator";
 import Jwt from "jsonwebtoken";
-import { otp } from "../../../../../../model/otp";
+import { otp } from "../../../../../model/otp";
 export const POST = async (req) => {
   try {
     await connectDB();

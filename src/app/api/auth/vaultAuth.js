@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
-import { user as User } from "../../../../../model/user";
-import { connectDB } from "../../../../../utils/dbconnect";
+import { user as User } from "../../../../model/user";
+import { connectDB } from "../../../../utils/dbconnect";
 import bcrypt from "bcrypt";
 
 export const POST = async (req) => {

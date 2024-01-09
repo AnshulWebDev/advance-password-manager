@@ -1,9 +1,9 @@
 import { NextResponse } from "next/server";
-import { connectDB } from "../../../../../../utils/dbconnect";
-import { user } from "../../../../../../model/user";
+import { connectDB } from "../../../../../utils/dbconnect";
+import { user } from "../../../../../model/user";
 import Jwt from "jsonwebtoken";
-import { otp as OTP } from "../../../../../../model/otp";
-import { mailSender } from "../../../../../../utils/mailSender";
+import { otp as OTP } from "../../../../../model/otp";
+import { mailSender } from "../../../../../utils/mailSender";
 
 export const POST = async (req) => {
   try {

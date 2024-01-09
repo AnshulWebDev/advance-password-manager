@@ -1,8 +1,8 @@
-import { otp } from "../../../../../../model/otp";
+import { otp } from "../../../../../model/otp";
 import otpGenerator from "otp-generator";
-import { mailSender } from "../../../../../../utils/mailSender";
+import { mailSender } from "../../../../../utils/mailSender";
 import { NextResponse } from "next/server";
-import { connectDB } from "../../../../../../utils/dbconnect";
+import { connectDB } from "../../../../../utils/dbconnect";
 export const POST = async (req) => {
   try {
     await connectDB();
