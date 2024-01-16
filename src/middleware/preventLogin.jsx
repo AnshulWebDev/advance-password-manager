@@ -1,18 +1,14 @@
 import { Cookies } from "react-cookie";
 import { isExpired, decodeToken } from "react-jwt";
 import { Navigate } from "react-router-dom";
-
-const Auth = ({ Component }) => {
+const PreventLogin = ({ Component }) => {
   const cookies = new Cookies();
   const token = cookies.get("token") || localStorage.getItem("token");
-  if (!token) {
-    console.log("no token");
-    return <Navigate to={"/login"} />;
-  } else {
+  if (token) {
     const myDecodedToken = decodeToken(token);
     const isMyTokenExpired = isExpired(token);
-    if (isMyTokenExpired === true && !myDecodedToken) {
-      return <Navigate to={"/login"} />;
+    if (!isMyTokenExpired && myDecodedToken) {
+      return <Navigate to={"/dashboard"} />;
     }
   }
   return (
@@ -22,4 +18,4 @@ const Auth = ({ Component }) => {
   );
 };
 
-export default Auth;
+export default PreventLogin;

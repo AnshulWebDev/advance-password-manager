@@ -9,6 +9,7 @@ import axios from "axios";
 import { toast } from "react-hot-toast";
 import { Helmet } from "react-helmet-async";
 import { useCookies } from "react-cookie";
+
 const Login = () => {
   const [cookies, setCookie] = useCookies(["token"]);
   const navigate = useNavigate();
@@ -17,6 +18,7 @@ const Login = () => {
     password: "",
   });
   const [view, setView] = useState(true);
+  const [loading, setLoading] = useState(false);
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prevData) => ({
@@ -27,6 +29,7 @@ const Login = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true);
     await axios
       .post(
         "https://cipher-guard-backend.vercel.app/api/auth/login",
@@ -50,6 +53,7 @@ const Login = () => {
       .catch(function (error) {
         toast.error(error.response.data.message);
       });
+    setLoading(false);
   };
 
   const handlePasswdView = (e) => {
@@ -111,12 +115,18 @@ const Login = () => {
                     {view ? <FaEyeSlash /> : <FaEye />}
                   </div>
                 </label>
-                <button
-                  className="p-2 w-8/12 rounded-full text-white bg-[#BFAFF2] mx-auto"
-                  type="submit"
-                >
-                  Login
-                </button>
+                {loading ? (
+                  <div className="spinner mx-auto"></div>
+                ) : (
+                  <button
+                    className="p-2 w-8/12 rounded-full text-white bg-[#BFAFF2] mx-auto"
+                    type="submit"
+                    onClick={handleSubmit}
+                    disabled={loading} // Disable the button while loading
+                  >
+                    Login
+                  </button>
+                )}
               </form>
             </div>
             <div>Have no account yet?</div>

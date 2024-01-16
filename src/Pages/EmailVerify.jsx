@@ -6,7 +6,14 @@ import { FaEye } from "react-icons/fa";
 import spaceArt from "../assets/registerArt.png";
 import { useNavigate } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
+import axios from "axios";
+import { toast } from "react-hot-toast";
+import { Cookies } from "react-cookie";
 const EmailVerify = () => {
+  const cookies = new Cookies();
+  const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
+  const token = cookies.get("data") || localStorage.getItem("data");
   const [formData, setFormData] = useState({
     otp: "",
   });
@@ -19,14 +26,54 @@ const EmailVerify = () => {
     }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true);
     // Add your form submission logic here
-    console.log("Form submitted:", formData);
+    await axios
+      .post(
+        "https://cipher-guard-backend.vercel.app/api/auth/register/verifyOtp",
+        formData,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      )
+      .then(function (response) {
+        toast.success(response.data.message);
+
+        navigate("/login");
+        cookies.remove("data");
+        localStorage.removeItem("data");
+        setLoading(false);
+      })
+      .catch(function (error) {
+        toast.error(error.response.data.message);
+        setLoading(false);
+      });
   };
 
   const handlePasswdView = (e) => {
     setView((prev) => !prev);
+  };
+  const resendOtp = async (e) => {
+    await axios
+      .post(
+        "https://cipher-guard-backend.vercel.app/api/auth/register/resendOtp",
+        "",
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      )
+      .then(function (response) {
+        toast.success(response.data.message);
+      })
+      .catch(function (error) {
+        toast.error(error.response.data.message);
+      });
   };
   return (
     <div className=" h-screen flex items-center">
@@ -73,12 +120,20 @@ const EmailVerify = () => {
                     {view ? <FaEyeSlash /> : <FaEye />}
                   </div>
                 </label>
-                <button
-                  className="p-2 w-8/12 rounded-full text-white bg-[#BFAFF2] mx-auto"
-                  type="submit"
-                >
-                  Verify
-                </button>
+
+                {loading ? (
+                  <div className="spinner mx-auto"></div>
+                ) : (
+                  <button
+                    className="p-2 w-8/12 rounded-full text-white bg-[#BFAFF2] mx-auto"
+                    type="submit"
+                  >
+                    Verify
+                  </button>
+                )}
+                <div onClick={resendOtp} className="text-end cursor-pointer">
+                  Resend otp
+                </div>
               </form>
             </div>
           </div>

@@ -9,7 +9,11 @@ import { FaEye } from "react-icons/fa";
 import { Helmet } from "react-helmet-async";
 import { useCookies } from "react-cookie";
 import { toast } from "react-hot-toast";
+import axios from "axios";
 const Register = () => {
+  const [cookies, setCookie] = useCookies(["data"]);
+  const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",
@@ -26,10 +30,31 @@ const Register = () => {
     }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true);
     // Add your form submission logic here
-    console.log("Form submitted:", formData);
+    await axios
+      .post(
+        "https://cipher-guard-backend.vercel.app/api/auth/register/sendOtp",
+        formData,
+        {
+          withCredentials: true,
+          credentials: "include",
+        }
+      )
+      .then(function (response) {
+        localStorage.setItem("data", response.data.data);
+        setCookie("data", response.data.data, {
+          maxAge: 36600,
+        });
+        toast.success(response.data.message);
+        navigate("/register/otpverify");
+      })
+      .catch(function (error) {
+        toast.error(error.response.data.message);
+      });
+    setLoading(false);
   };
 
   const handlePasswdView = (e) => {
@@ -132,12 +157,16 @@ const Register = () => {
                     {view ? <FaEyeSlash /> : <FaEye />}
                   </div>
                 </label>
-                <button
-                  className="p-2 w-8/12 rounded-full text-white bg-[#BFAFF2] mx-auto"
-                  type="submit"
-                >
-                  Send otp
-                </button>
+                {loading ? (
+                  <div className="spinner mx-auto"></div>
+                ) : (
+                  <button
+                    className="p-2 w-8/12 rounded-full text-white bg-[#BFAFF2] mx-auto"
+                    type="submit"
+                  >
+                    Send otp
+                  </button>
+                )}
               </form>
             </div>
             <div>Aready have account?</div>
