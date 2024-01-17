@@ -7,7 +7,7 @@ const FeaturesCompnent = ({ heading, content, img }) => {
       </div>
       <div className=" flex flex-col gap-1 w-fit">
         <div className=" text-white font-bold">{heading}</div>
-        <div className=" text-white font-normal opacity-25">{content}</div>
+        <div className=" text-neutral-500 font-normal">{content}</div>
       </div>
     </div>
   )

@@ -13,7 +13,7 @@ const Quote = () => {
             no safer in the long run than outright exposure. Life is either a
             daring adventure, or nothing.
           </div>
-          <div className=" mt-10 text-sm opacity-50">Helen Keller</div>
+          <div className=" mt-10 text-sm text-neutral-700 ">Helen Keller</div>
         </div>
       </div>
     </>

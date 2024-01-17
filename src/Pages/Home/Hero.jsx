@@ -12,7 +12,7 @@ const Hero = () => {
         <h1 className=" font-semibold mb-[60px] text-center md:text-6xl text-4xl">
           CipherGuard
         </h1>
-        <p className=" text-[18px] opacity-40 text-center">
+        <p className=" text-[18px] text-neutral-500  text-center">
           Master Your Digital Keys: CipherGuard - Where Security Meets
           Simplicity.
         </p>
@@ -24,7 +24,7 @@ const Hero = () => {
         </Link>
         <img src={HeroImg} className="mt-32 lg:w-full w-[80%]" alt="" />
       </div>
-      <div className="h-0.5 w-full bg-white opacity-20"></div>
+      <div className="h-0.5 w-full bg-neutral-600"></div>
     </div>
   );
 };
