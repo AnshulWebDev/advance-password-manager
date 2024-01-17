@@ -79,7 +79,7 @@ const Login = () => {
           </div>
           {/* Right Side */}
           <div className="w-full  mx-auto  max-w-md lg:w-2/5 flex flex-col justify-center items-center">
-            <div className="text-3xl">Welcome</div>
+            <div className="text-3xl">Welcome Back</div>
             <div className="w-full">
               <form
                 onSubmit={handleSubmit}
