@@ -3,7 +3,7 @@ import { FaMicrosoft } from "react-icons/fa";
 import { FaApple } from "react-icons/fa";
 import { FaGoogle } from "react-icons/fa";
 import { RiNetflixFill } from "react-icons/ri";
-const Companies = () => {
+const Company = () => {
   return (
     <>
       <div className=" flex flex-col justify-center text-xl text-white opacity-40 font-medium py-14">
@@ -35,4 +35,4 @@ const Companies = () => {
   );
 };
 
-export default Companies;
+export default Company;
