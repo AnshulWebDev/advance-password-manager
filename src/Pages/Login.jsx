@@ -62,7 +62,7 @@ const Login = () => {
   return (
     <div className=" h-screen flex items-center">
       <Helmet>
-        <title>CipherGuard | Login</title>
+        <title>Login</title>
         <meta name="description" content="Cipher Guard Login page." />
       </Helmet>
       <div className=" mx-auto w-9/12 h-4/5 shadow-md rounded-xl">

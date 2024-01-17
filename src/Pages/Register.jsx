@@ -64,7 +64,7 @@ const Register = () => {
   return (
     <div className=" h-screen flex items-center">
       <Helmet>
-        <title>CipherGuard | Register</title>
+        <title>Register</title>
         <meta name="description" content="Cipher Guard Register page." />
       </Helmet>
       <div className=" mx-auto w-9/12 h-4/5 shadow-lgrounded-xl">
