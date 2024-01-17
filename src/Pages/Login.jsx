@@ -32,7 +32,7 @@ const Login = () => {
     setLoading(true);
     await axios
       .post(
-        "https://cipher-guard-backend.vercel.app/api/auth/login",
+        `${import.meta.env.VITE_BACKEND_URL}/api/auth/login`,
         {
           email: formData.email,
           password: formData.password,

@@ -36,7 +36,7 @@ const Register = () => {
     // Add your form submission logic here
     await axios
       .post(
-        "https://cipher-guard-backend.vercel.app/api/auth/register/sendOtp",
+        `${import.meta.env.VITE_BACKEND_URL}/api/auth/register/sendOtp`,
         formData,
         {
           withCredentials: true,

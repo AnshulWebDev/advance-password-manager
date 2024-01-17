@@ -61,7 +61,7 @@ const EmailVerify = () => {
     setLoading(true);
     await axios
       .post(
-        "https://cipher-guard-backend.vercel.app/api/auth/register/resendOtp",
+        `${import.meta.env.VITE_BACKEND_URL}/api/auth/register/resendOtp`,
         "",
         {
           headers: {
