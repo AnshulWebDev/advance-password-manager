@@ -28,7 +28,6 @@ const Contact = () => {
           <img src={AssetImg} className=" lg:w-48 w-40" alt="" />
         </div>
       </div>
-      <div className="h-0.5 w-full bg-neutral-600 mt-20"></div>
     </>
   );
 };

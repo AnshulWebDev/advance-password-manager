@@ -9,6 +9,7 @@ import PageNotFound from "./Pages/PageNotFound";
 import PreventLogin from "./middleware/preventLogin";
 import EmailOtpDetect from "./middleware/EmailOtpDetect";
 import Main from "./Pages/Home/Main";
+import PrivacyPolicy from "./Pages/PrivacyPolicy";
 const App = () => {
   return (
     <HelmetProvider>
@@ -24,6 +25,7 @@ const App = () => {
           element={<EmailOtpDetect Component={EmailVerify} />}
         />
         <Route path="/dashboard" element={<Auth Component={Dashboard} />} />
+        <Route path="/privacy-policy" element={<PrivacyPolicy />} />
         <Route path="*" element={<PageNotFound />} />
       </Routes>
     </HelmetProvider>

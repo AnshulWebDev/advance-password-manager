@@ -13,7 +13,13 @@ const Navbar = () => {
 
   return (
     <div className="flex justify-between bg-[#2B2B2B] h-[70px] items-center relative">
-      <img className="cursor-pointer w-36" src={Logo} alt="cipherguard logo" />
+      <Link to={"/"}>
+        <img
+          className="cursor-pointer w-36"
+          src={Logo}
+          alt="cipherguard logo"
+        />
+      </Link>
       <div className=" hidden md:block">
         <Link to={"/register"} className="text-white mr-8">
           Sign up
