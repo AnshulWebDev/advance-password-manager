@@ -7,7 +7,7 @@ const Features = () => {
   return (
     <div className=" flex justify-between flex-wrap mt-8 mb-5">
       {/* leftDiv */}
-      <div className=" lg:w-1/2 w-full flex flex-col justify-center items-center lg:flex-none">
+      <div className=" lg:w-1/2 w-full flex flex-col justify-center xl:items-start items-center lg:flex-none">
         <div>
           <FeaturesCompnent
             heading={"Password Strength Meter"}
