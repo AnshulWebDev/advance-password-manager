@@ -3,17 +3,17 @@ import Login from "./Pages/Login";
 import Dashboard from "./Pages/Dashboard";
 import Register from "./Pages/Register";
 import { HelmetProvider } from "react-helmet-async";
-import LandingPage from "./Pages/LandingPage";
 import EmailVerify from "./Pages/EmailVerify";
 import Auth from "./middleware/auth";
 import PageNotFound from "./Pages/PageNotFound";
 import PreventLogin from "./middleware/preventLogin";
 import EmailOtpDetect from "./middleware/EmailOtpDetect";
+import Main from "./Pages/Home/Main";
 const App = () => {
   return (
     <HelmetProvider>
       <Routes>
-        <Route path="/" element={<LandingPage />} />
+        <Route path="/" element={<Main />} />
         <Route path="/login" element={<PreventLogin Component={Login} />} />
         <Route
           path="/register"

@@ -58,6 +58,7 @@ const EmailVerify = () => {
     setView((prev) => !prev);
   };
   const resendOtp = async (e) => {
+    setLoading(true);
     await axios
       .post(
         "https://cipher-guard-backend.vercel.app/api/auth/register/resendOtp",
@@ -70,9 +71,11 @@ const EmailVerify = () => {
       )
       .then(function (response) {
         toast.success(response.data.message);
+        setLoading(false);
       })
       .catch(function (error) {
         toast.error(error.response.data.message);
+        setLoading(false);
       });
   };
   return (
