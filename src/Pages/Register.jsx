@@ -152,7 +152,7 @@ const Register = () => {
                   />
                   <div
                     onClick={handlePasswdView}
-                    className="absolute top-1/2 transform -translate-y-1/2 right-[15%]  cursor-pointer"
+                    className="absolute top-1/2 transform -translate-y-1/2 right-[8%] sm:right-[15%]   cursor-pointer"
                   >
                     {view ? <FaEyeSlash /> : <FaEye />}
                   </div>
