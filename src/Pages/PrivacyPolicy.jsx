@@ -5,7 +5,7 @@ const PrivacyPolicy = () => {
   return (
     <div className="bg-[#2B2B2B] md:px-24 px-8 h-full text-neutral-500">
       <Helmet>
-        <title>Privacy Policy</title>
+        <title>CipherGuard - Privacy Policy</title>
         <meta name="description" content="Cipher Guard Login page." />
       </Helmet>
       <Navbar />
