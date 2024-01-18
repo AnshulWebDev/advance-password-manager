@@ -7,10 +7,10 @@ const SidebarContext = createContext();
 import { Cookies } from "react-cookie";
 import { toast } from "react-hot-toast";
 
-export const Sidebar = async({ children }) => {
+export const Sidebar = ({ children }) => {
   const [expanded, setExpanded] = useState(true);
   const cookies = new Cookies();
-  const adminProfile =await JSON.parse(localStorage.getItem("admin_profile"));
+  const adminProfile = JSON.parse(localStorage.getItem("admin_profile"));
   const navigate = useNavigate();
   const logoutHandler = () => {
     cookies.remove("admin_token");
@@ -76,10 +76,10 @@ export const Sidebar = async({ children }) => {
   );
 };
 
-export const MobileSideBar=async({ items }) =>{
+export const MobileSideBar=({ items }) =>{
   const navigate = useNavigate();
   const cookies = new Cookies();
-  const adminProfile = await JSON.parse(localStorage.getItem("admin_profile"));
+  const adminProfile = JSON.parse(localStorage.getItem("admin_profile"));
   const logoutHandler = () => {
     cookies.remove("admin_token");
     localStorage.removeItem("admin_token");
