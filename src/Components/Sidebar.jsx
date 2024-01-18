@@ -1,22 +1,35 @@
-import { MoreVertical, ChevronLast, ChevronFirst } from "lucide-react";
-import { useContext, createContext, useState } from "react";
-import { RiAdminFill } from "react-icons/ri";
+import { ChevronLast, ChevronFirst } from "lucide-react";
+import { useContext, createContext, useState,  } from "react";
 import Logo from "../assets/logo.png";
+import { FaSignOutAlt } from "react-icons/fa";
+import { Link, useNavigate } from "react-router-dom";
 const SidebarContext = createContext();
+import { Cookies } from "react-cookie";
+import { toast } from "react-hot-toast";
+
+const adminProfile = await JSON.parse(localStorage.getItem("admin_profile"));
 
 export const Sidebar = ({ children }) => {
   const [expanded, setExpanded] = useState(true);
-
+  const cookies = new Cookies();
+  const navigate = useNavigate();
+  const logoutHandler = () => {
+    cookies.remove("admin_token");
+    localStorage.removeItem("admin_token");
+    localStorage.removeItem("admin_profile");
+    toast.success("Loggout");
+    navigate("/");
+  };
   return (
-    <aside className="h-screen">
-      <nav className="h-full flex flex-col border-neutral-700 border-r shadow-sm">
+    <aside className="h-screen ">
+      <nav className="h-full hidden sm:flex flex-col border-neutral-700 border-r shadow-sm">
         <div className="p-4 pb-2 flex justify-between items-center">
           <img
             src={Logo}
             className={`overflow-hidden transition-all ${
               expanded ? "w-32" : "w-0"
             }`}
-            alt=""
+            alt="Profile Image"
           />
           <button
             onClick={() => setExpanded((curr) => !curr)}
@@ -27,24 +40,36 @@ export const Sidebar = ({ children }) => {
         </div>
 
         <SidebarContext.Provider value={{ expanded }}>
-          <ul className="flex-1 px-3">{children}</ul>
+          <ul className="flex-1 px-3">
+            {children}
+            <div onClick={logoutHandler}>
+              <SidebarItem
+                icon={<FaSignOutAlt className=" w-5 h-5" />}
+                text={"Loggout"}
+              />
+            </div>
+          </ul>
         </SidebarContext.Provider>
-
         <div className="border-neutral-700 border-t flex items-center justify-center p-3">
-          <RiAdminFill className="w-8 h-8 rounded-md text-white" />
+          <img
+            className="w-8 h-8 rounded-md"
+            src={adminProfile.profileImg}
+            alt=""
+          />
           <div
             className={`
-              flex justify-between items-center
+              flex justify-between  items-center
               overflow-hidden transition-all ${expanded ? "w-52 ml-3" : "w-0"}
           `}
           >
             <div className="leading-4">
-              <h4 className="font-semibold text-white">John Doe</h4>
+              <h4 className="font-semibold text-white">
+                {adminProfile.firstName} {adminProfile.lastName}
+              </h4>
               <span className="text-xs text-neutral-500">
-                johndoe@gmail.com
+                {adminProfile.email}
               </span>
             </div>
-            <MoreVertical size={20} />
           </div>
         </div>
       </nav>
@@ -52,9 +77,83 @@ export const Sidebar = ({ children }) => {
   );
 };
 
-export function SidebarItem({ icon, text, active, alert }) {
-  const { expanded } = useContext(SidebarContext);
+export function MobileSideBar({ items }) {
+  const navigate = useNavigate();
+  const cookies = new Cookies();
+  const logoutHandler = () => {
+    cookies.remove("admin_token");
+    localStorage.removeItem("admin_token");
+    localStorage.removeItem("admin_profile");
+    toast.success("Loggout");
+    navigate("/");
+  };
+  return (
+    <aside className="h-screen">
+      <nav className="h-full flex sm:hidden flex-col border-neutral-700 border-r shadow-sm">
+        <ul className="flex-1 px-3 my-5">
+          {items.map((item, index) => (
+            <Link
+              key={index}
+              to={item.link}
+              className={`
+                relative flex items-center p-3 my-5
+                font-medium rounded-md cursor-pointer
+                transition-colors group
+                ${
+                  item.active
+                    ? "bg-neutral-300 text-black"
+                    : "hover:bg-neutral-600 hover:text-white text-neutral-300"
+                }
+              `}
+            >
+              {item.icon}
 
+              <div
+                className={`
+                  absolute left-full rounded-md px-2 py-1 ml-6
+                  bg-neutral-300 text-black text-sm
+                  invisible opacity-20 -translate-x-3 transition-all
+                  group-hover:visible group-hover:opacity-100 group-hover:translate-x-0`}
+              >
+                {item.text}
+              </div>
+            </Link>
+          ))}
+
+          {/* Logout */}
+          <button
+            onClick={logoutHandler}
+            className={`
+              relative flex items-center p-3 my-5
+              font-medium rounded-md cursor-pointer
+              transition-colors group hover:bg-neutral-600 hover:text-white text-neutral-300`}
+          >
+            <FaSignOutAlt className="w-5 h-5" />
+            <div
+              className={`
+                absolute left-full rounded-md px-2 py-1 ml-6
+                bg-neutral-300 text-black text-sm
+                invisible opacity-20 -translate-x-3 transition-all
+                group-hover:visible group-hover:opacity-100 group-hover:translate-x-0`}
+            >
+              Logout
+            </div>
+          </button>
+        </ul>
+        <div className="border-neutral-700 border-t flex items-center justify-center p-3">
+          <img
+            className="w-8 h-8 rounded-md"
+            src={adminProfile.profileImg}
+            alt="Profile Image"
+          />
+        </div>
+      </nav>
+    </aside>
+  );
+}
+
+export function SidebarItem({ icon, text, active }) {
+  const { expanded } = useContext(SidebarContext);
   return (
     <li
       className={`
@@ -76,13 +175,6 @@ export function SidebarItem({ icon, text, active, alert }) {
       >
         {text}
       </span>
-      {alert && (
-        <div
-          className={`absolute right-2 w-2 h-2 rounded bg-indigo-400 ${
-            expanded ? "" : "top-2"
-          }`}
-        />
-      )}
 
       {!expanded && (
         <div

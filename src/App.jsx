@@ -14,6 +14,10 @@ import AdminDashboard from "./Admin/Dashboard";
 import AdminLogin from "./Admin/Login";
 import AdminAuth from "./middleware/admin/Auth";
 import AdminPreventLogin from "./middleware/admin/PreventLogin";
+import AdminUsers from "./Admin/Users";
+import AdminAnalytics from "./Admin/Analytics";
+import AdminUnlockUsers from "./Admin/UnlockUser";
+import AdminSetting from "./Admin/Setting";
 const App = () => {
   return (
     <HelmetProvider>
@@ -37,6 +41,22 @@ const App = () => {
         <Route
           path="/admin/login"
           element={<AdminPreventLogin Component={AdminLogin} />}
+        />
+        <Route
+          path="/admin/users"
+          element={<AdminAuth Component={AdminUsers} />}
+        />
+        <Route
+          path="/admin/analytics"
+          element={<AdminAuth Component={AdminAnalytics} />}
+        />
+        <Route
+          path="/admin/unlock-user"
+          element={<AdminAuth Component={AdminUnlockUsers} />}
+        />
+        <Route
+          path="/admin/setting"
+          element={<AdminAuth Component={AdminSetting} />}
         />
         <Route path="*" element={<PageNotFound />} />
       </Routes>

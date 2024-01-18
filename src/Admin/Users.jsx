@@ -13,12 +13,12 @@ const MobileSidebarItems = [
     icon: <MdDashboard className="w-5 h-5" />,
     text: "Dashboard",
     link: "/admin/dashboard",
-    active: true,
   },
   {
     icon: <HiUsers className="w-5 h-5" />,
     text: "Users",
     link: "/admin/users",
+    active: true,
   },
   {
     icon: <MdAnalytics className="w-5 h-5" />,
@@ -37,22 +37,25 @@ const MobileSidebarItems = [
   },
 ];
 
-const Dashboard = () => {
+const Users = () => {
   return (
     <main className=" flex bg-[#2B2B2B]">
       <Helmet>
-        <title>Admin - Dashboard</title>
+        <title>Admin - Users</title>
       </Helmet>
       <Sidebar>
         <Link to={"/admin/dashboard"}>
           <SidebarItem
             icon={<MdDashboard className=" w-5 h-5" />}
             text={"Dashboard"}
-            active={true}
           />
         </Link>
         <Link to={"/admin/users"}>
-          <SidebarItem icon={<HiUsers className=" w-5 h-5" />} text={"Users"} />
+          <SidebarItem
+            icon={<HiUsers className=" w-5 h-5" />}
+            text={"Users"}
+            active={true}
+          />
         </Link>
         <Link to={"/admin/analytics"}>
           <SidebarItem
@@ -74,11 +77,10 @@ const Dashboard = () => {
         </Link>
       </Sidebar>
 
-      {/* mobile sidebar  */}
-      <MobileSideBar items={MobileSidebarItems} />
+      <MobileSideBar items={MobileSidebarItems}/>
       <div>Dashboard</div>
     </main>
   );
 };
 
-export default Dashboard;
+export default Users;

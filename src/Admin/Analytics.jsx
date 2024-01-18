@@ -1,19 +1,18 @@
 import React from "react";
 import { MobileSideBar, Sidebar, SidebarItem } from "../Components/Sidebar";
 import { HiLockOpen } from "react-icons/hi2";
+import { Link } from "react-router-dom";
 import { MdDashboard } from "react-icons/md";
 import { HiUsers } from "react-icons/hi2";
 import { MdAnalytics } from "react-icons/md";
 import { IoSettingsSharp } from "react-icons/io5";
 import { Helmet } from "react-helmet-async";
-import { Link } from "react-router-dom";
 
 const MobileSidebarItems = [
   {
     icon: <MdDashboard className="w-5 h-5" />,
     text: "Dashboard",
     link: "/admin/dashboard",
-    active: true,
   },
   {
     icon: <HiUsers className="w-5 h-5" />,
@@ -24,6 +23,7 @@ const MobileSidebarItems = [
     icon: <MdAnalytics className="w-5 h-5" />,
     text: "Analytics",
     link: "/admin/analytics",
+    active: true,
   },
   {
     icon: <HiLockOpen className="w-5 h-5" />,
@@ -37,18 +37,17 @@ const MobileSidebarItems = [
   },
 ];
 
-const Dashboard = () => {
+const Analytics = () => {
   return (
     <main className=" flex bg-[#2B2B2B]">
       <Helmet>
-        <title>Admin - Dashboard</title>
+        <title>Admin - Analytics</title>
       </Helmet>
       <Sidebar>
         <Link to={"/admin/dashboard"}>
           <SidebarItem
             icon={<MdDashboard className=" w-5 h-5" />}
             text={"Dashboard"}
-            active={true}
           />
         </Link>
         <Link to={"/admin/users"}>
@@ -58,6 +57,7 @@ const Dashboard = () => {
           <SidebarItem
             icon={<MdAnalytics className=" w-5 h-5" />}
             text={"Analytics"}
+            active={true}
           />
         </Link>
         <Link to={"/admin/unlock-user"}>
@@ -74,11 +74,10 @@ const Dashboard = () => {
         </Link>
       </Sidebar>
 
-      {/* mobile sidebar  */}
       <MobileSideBar items={MobileSidebarItems} />
       <div>Dashboard</div>
     </main>
   );
 };
 
-export default Dashboard;
+export default Analytics;

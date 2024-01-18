@@ -44,6 +44,8 @@ const Login = () => {
       )
       .then(function (response) {
         localStorage.setItem("admin_token", response.data.data);
+        const profile = JSON.stringify(response.data.profile);
+        localStorage.setItem("admin_profile", profile);
         setCookie("admin_token", response.data.data, {
           maxAge: 36600,
         });

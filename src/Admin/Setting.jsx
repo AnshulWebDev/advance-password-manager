@@ -13,7 +13,6 @@ const MobileSidebarItems = [
     icon: <MdDashboard className="w-5 h-5" />,
     text: "Dashboard",
     link: "/admin/dashboard",
-    active: true,
   },
   {
     icon: <HiUsers className="w-5 h-5" />,
@@ -34,21 +33,21 @@ const MobileSidebarItems = [
     icon: <IoSettingsSharp className="w-5 h-5" />,
     text: "Settings",
     link: "/admin/setting",
+    active: true,
   },
 ];
 
-const Dashboard = () => {
+const Setting = () => {
   return (
     <main className=" flex bg-[#2B2B2B]">
       <Helmet>
-        <title>Admin - Dashboard</title>
+        <title>Admin - Settings</title>
       </Helmet>
       <Sidebar>
         <Link to={"/admin/dashboard"}>
           <SidebarItem
             icon={<MdDashboard className=" w-5 h-5" />}
             text={"Dashboard"}
-            active={true}
           />
         </Link>
         <Link to={"/admin/users"}>
@@ -70,15 +69,15 @@ const Dashboard = () => {
           <SidebarItem
             icon={<IoSettingsSharp className=" w-5 h-5" />}
             text={"Settings"}
+            active={true}
           />
         </Link>
       </Sidebar>
 
-      {/* mobile sidebar  */}
       <MobileSideBar items={MobileSidebarItems} />
       <div>Dashboard</div>
     </main>
   );
 };
 
-export default Dashboard;
+export default Setting;
