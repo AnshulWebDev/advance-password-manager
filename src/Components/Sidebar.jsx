@@ -1,5 +1,5 @@
 import { ChevronLast, ChevronFirst } from "lucide-react";
-import { useContext, createContext, useState,  } from "react";
+import { useContext, createContext, useState } from "react";
 import Logo from "../assets/logo.png";
 import { FaSignOutAlt } from "react-icons/fa";
 import { Link, useNavigate } from "react-router-dom";
@@ -76,7 +76,7 @@ export const Sidebar = ({ children }) => {
   );
 };
 
-export const MobileSideBar=({ items }) =>{
+export const MobileSideBar = ({ items }) => {
   const navigate = useNavigate();
   const cookies = new Cookies();
   const adminProfile = JSON.parse(localStorage.getItem("admin_profile"));
@@ -88,8 +88,8 @@ export const MobileSideBar=({ items }) =>{
     navigate("/");
   };
   return (
-    <aside className="h-screen">
-      <nav className="h-full flex sm:hidden flex-col border-neutral-700 border-r shadow-sm">
+    <aside className="h-screen  ">
+      <nav className="h-full flex sm:hidden fixed left-0 top-0 flex-col border-neutral-700 border-r shadow-sm">
         <ul className="flex-1 px-3 my-5">
           {items.map((item, index) => (
             <Link
@@ -150,7 +150,7 @@ export const MobileSideBar=({ items }) =>{
       </nav>
     </aside>
   );
-}
+};
 
 export function SidebarItem({ icon, text, active }) {
   const { expanded } = useContext(SidebarContext);
