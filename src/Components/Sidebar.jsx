@@ -7,7 +7,7 @@ const SidebarContext = createContext();
 import { Cookies } from "react-cookie";
 import { toast } from "react-hot-toast";
 
-const adminProfile = await JSON.parse(localStorage.getItem("admin_profile"));
+const adminProfile = JSON.parse(localStorage.getItem("admin_profile"));
 
 export const Sidebar = ({ children }) => {
   const [expanded, setExpanded] = useState(true);
