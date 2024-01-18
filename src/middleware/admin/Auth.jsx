@@ -6,7 +6,7 @@ const Auth = ({ Component }) => {
   const cookies = new Cookies();
   const token = cookies.get("admin_token") || localStorage.getItem("admin_token"); 
   const adminProfile = JSON.parse(localStorage.getItem("admin_profile"));
-  if (!token && adminProfile === null ) {
+  if (!token && adminProfile == null ) {
     // console.log("no token");
     return <Navigate to={"/admin/login"} />;
   } else {
