@@ -8,47 +8,38 @@ const Auth = ({ Component = () => null }) => {
   const token =
     cookies.get("admin_token") || localStorage.getItem("admin_token");
   const adminProfile = JSON.parse(localStorage.getItem("admin_profile"));
-  useEffect(() => {
-    const fetchData = async () => {
-      setLoading(true);
-      await axios
-        .post(
-          `${import.meta.env.VITE_BACKEND_URL}/api/admin/adminProfile`,
-          "",
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        )
-        .then(function (response) {
-          setData(response.data.data);
-          // console.log(response.data.data);
-        })
-        .catch(function (error) {
-          if (
-            error.response.data.message === "session expired, Login again" ||
-            error.response.data.message === "Token Is missing" ||
-            error.response.data.message === "Token Is Invalid"
-          ) {
-            cookies.remove("admin_token");
-            localStorage.removeItem("admin_token");
-            localStorage.removeItem("admin_profile");
-          }
-          // console.error(error.response.data.message);
-        });
-      setLoading(false);
-    };
-
-    fetchData();
-  }, []);
+  const fetchData = async () => {
+    await axios
+      .post(`${import.meta.env.VITE_BACKEND_URL}/api/admin/adminProfile`, "", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+      .then(function (response) {
+        setData(response.data.data);
+        // console.log(response.data.data);
+      })
+      .catch(function (error) {
+        if (
+          error.response.data.message === "session expired, Login again" ||
+          error.response.data.message === "Token Is missing" ||
+          error.response.data.message === "Token Is Invalid"
+        ) {
+          cookies.remove("admin_token");
+          localStorage.removeItem("admin_token");
+          localStorage.removeItem("admin_profile");
+        }
+        // console.error(error.response.data.message);
+      });
+  };
+  fetchData();
   if (!token && !adminProfile) {
     // console.log("no token");
     return <Navigate to={"/admin/login"} />;
   } else {
     const myDecodedToken = decodeToken(token);
     const isMyTokenExpired = isExpired(token);
-    if (isMyTokenExpired === true && !myDecodedToken) {
+    if (isMyTokenExpired === true || !myDecodedToken) {
       return <Navigate to={"/admin/login"} />;
     }
   }
