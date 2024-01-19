@@ -5,13 +5,19 @@ import { Navigate } from "react-router-dom";
 const Auth = ({ Component }) => {
   const cookies = new Cookies();
   const token = cookies.get("token") || localStorage.getItem("token");
-  if (!token) {
-    console.log("no token");
+  const profile = JSON.parse(localStorage.getItem("profile"));
+  if (!token || !profile) {
+    // console.log("no token");
+    cookies.remove("token");
+    localStorage.removeItem("token");
+    localStorage.removeItem("profile");
     return <Navigate to={"/login"} />;
   } else {
-    const myDecodedToken = decodeToken(token);
     const isMyTokenExpired = isExpired(token);
-    if (isMyTokenExpired === true && !myDecodedToken) {
+    if (isMyTokenExpired === true) {
+      cookies.remove("token");
+      localStorage.removeItem("token");
+      localStorage.removeItem("profile");
       return <Navigate to={"/login"} />;
     }
   }

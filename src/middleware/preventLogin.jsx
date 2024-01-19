@@ -8,7 +8,7 @@ const PreventLogin = ({ Component }) => {
     const myDecodedToken = decodeToken(token);
     const isMyTokenExpired = isExpired(token);
     console.log(myDecodedToken, isMyTokenExpired);
-    if (!isMyTokenExpired || myDecodedToken) {
+    if (!isMyTokenExpired) {
       return <Navigate to={"/dashboard"} />;
     }
   }
