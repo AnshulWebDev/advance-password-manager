@@ -32,8 +32,10 @@ const App = () => {
           path="/register/otpverify"
           element={<EmailOtpDetect Component={EmailVerify} />}
         />
-        <Route path="/dashboard" element={<Auth Component={Dashboard} />} />
         <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+        {/* User Routes */}
+        <Route path="/dashboard" element={<Auth Component={Dashboard} />} />
+        {/* Admin Routes */}
         <Route
           path="/admin/dashboard"
           element={<AdminAuth Component={AdminDashboard} />}
