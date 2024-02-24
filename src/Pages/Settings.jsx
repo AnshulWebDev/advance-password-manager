@@ -5,7 +5,6 @@ const MobileSidebarItems = [
   {
     icon: <PiVaultLight className="w-5 h-5" />,
     link: "/dashboard",
-    active: true,
   },
   {
     icon: <GrDocumentNotes className="w-5 h-5" />,
@@ -18,6 +17,7 @@ const MobileSidebarItems = [
   {
     icon: <IoSettingsOutline className="w-5 h-5" />,
     link: "/settings",
+    active: true,
   },
 ];
 import { Link } from "react-router-dom";
@@ -27,20 +27,19 @@ import { PiVaultLight } from "react-icons/pi";
 import { GrDocumentNotes } from "react-icons/gr";
 import { RiAiGenerate } from "react-icons/ri";
 import { IoSettingsOutline } from "react-icons/io5";
-const Dashboard = () => {
+const Settings = () => {
   const Profile = JSON.parse(localStorage.getItem("profile"));
   return (
     <main className=" flex h-screen overflow-hidden pr-4 py-4 bg-black">
       <Helmet>
-        <title> {Profile.firstName}'s Dashboard</title>
-        <meta name="description" content="Cipher Guard Dashboard." />
+        <title> {Profile.firstName}'s Settings</title>
+        <meta name="description" content="" />
       </Helmet>
       <Sidebar>
-        <Link to={"/vault"}>
+        <Link to={"/dashboard"}>
           <SidebarItem
             icon={<PiVaultLight className=" w-5 h-5" />}
             text={"Dashboard"}
-            active={true}
           />
         </Link>
         <Link to={"/notes"}>
@@ -59,6 +58,7 @@ const Dashboard = () => {
           <SidebarItem
             icon={<IoSettingsOutline className=" w-5 h-5" />}
             text={"Settings"}
+            active={true}
           />
         </Link>
       </Sidebar>
@@ -74,4 +74,4 @@ const Dashboard = () => {
   );
 };
 
-export default Dashboard;
+export default Settings;

@@ -18,6 +18,9 @@ import AdminUsers from "./Admin/Users";
 import AdminAnalytics from "./Admin/Analytics";
 import AdminUnlockUsers from "./Admin/UnlockUser";
 import AdminSetting from "./Admin/Setting";
+import Notes from "./Pages/Notes";
+import Settings from "./Pages/Settings";
+import Generator from "./Pages/Generator";
 const App = () => {
   return (
     <HelmetProvider>
@@ -35,6 +38,10 @@ const App = () => {
         <Route path="/privacy-policy" element={<PrivacyPolicy />} />
         {/* User Routes */}
         <Route path="/dashboard" element={<Auth Component={Dashboard} />} />
+        <Route path="/notes" element={<Auth Component={Notes} />} />
+        <Route path="/generator" element={<Auth Component={Generator} />} />
+        <Route path="/settings" element={<Auth Component={Settings} />} />
+
         {/* Admin Routes */}
         <Route
           path="/admin/dashboard"
