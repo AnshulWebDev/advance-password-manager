@@ -1,6 +1,6 @@
 import { ChevronLast, ChevronFirst } from "lucide-react";
 import { useContext, createContext, useState } from "react";
-import Logo from "../assets/logo.png";
+import Logo from "../../assets/logo.png";
 import { FaSignOutAlt } from "react-icons/fa";
 import { Link, useNavigate } from "react-router-dom";
 const SidebarContext = createContext();
@@ -10,7 +10,7 @@ import { toast } from "react-hot-toast";
 export const Sidebar = ({ children }) => {
   const [expanded, setExpanded] = useState(true);
   const cookies = new Cookies();
-  const adminProfile = JSON.parse(localStorage.getItem("admin_profile"));
+  const Profile = JSON.parse(localStorage.getItem("admin_profile"));
   const navigate = useNavigate();
   const logoutHandler = () => {
     cookies.remove("admin_token");
@@ -50,11 +50,7 @@ export const Sidebar = ({ children }) => {
           </ul>
         </SidebarContext.Provider>
         <div className="border-neutral-700 border-t flex items-center justify-center p-3">
-          <img
-            className="w-8 h-8 rounded-md"
-            src={adminProfile.profileImg}
-            alt=""
-          />
+          <img className="w-8 h-8 rounded-md" src={Profile.profileImg} alt="" />
           <div
             className={`
               flex justify-between  items-center
@@ -63,11 +59,9 @@ export const Sidebar = ({ children }) => {
           >
             <div className="leading-4">
               <h4 className="font-semibold text-white">
-                {adminProfile.firstName} {adminProfile.lastName}
+                {Profile.firstName} {Profile.lastName}
               </h4>
-              <span className="text-xs text-neutral-500">
-                {adminProfile.email}
-              </span>
+              <span className="text-xs text-neutral-500">{Profile.email}</span>
             </div>
           </div>
         </div>
@@ -76,10 +70,50 @@ export const Sidebar = ({ children }) => {
   );
 };
 
+export function SidebarItem({ icon, text, active }) {
+  const { expanded } = useContext(SidebarContext);
+  return (
+    <li
+      className={`
+        relative flex items-center py-2 px-3 my-5
+        font-medium rounded-md cursor-pointer
+        transition-colors group
+        ${
+          active
+            ? "bg-neutral-300 text-black"
+            : "hover:bg-neutral-600 hover:text-white text-neutral-300"
+        }
+    `}
+    >
+      {icon}
+      <span
+        className={` overflow-hidden transition-all ${
+          expanded ? "w-52 ml-3" : "w-0"
+        }`}
+      >
+        {text}
+      </span>
+
+      {!expanded && (
+        <div
+          className={`
+          absolute left-full rounded-md px-2 py-1 ml-6
+          bg-neutral-300 text-black text-sm
+          invisible opacity-20 -translate-x-3 transition-all
+          group-hover:visible group-hover:opacity-100 group-hover:translate-x-0
+      `}
+        >
+          {text}
+        </div>
+      )}
+    </li>
+  );
+}
+
 export const MobileSideBar = ({ items }) => {
   const navigate = useNavigate();
   const cookies = new Cookies();
-  const adminProfile = JSON.parse(localStorage.getItem("admin_profile"));
+  const Profile = JSON.parse(localStorage.getItem("admin_profile"));
   const logoutHandler = () => {
     cookies.remove("admin_token");
     localStorage.removeItem("admin_token");
@@ -143,7 +177,7 @@ export const MobileSideBar = ({ items }) => {
         <div className="border-neutral-700 border-t flex items-center justify-center p-3">
           <img
             className="w-8 h-8 rounded-md"
-            src={adminProfile.profileImg}
+            src={Profile.profileImg}
             alt="Profile Image"
           />
         </div>
@@ -151,43 +185,3 @@ export const MobileSideBar = ({ items }) => {
     </aside>
   );
 };
-
-export function SidebarItem({ icon, text, active }) {
-  const { expanded } = useContext(SidebarContext);
-  return (
-    <li
-      className={`
-        relative flex items-center py-2 px-3 my-5
-        font-medium rounded-md cursor-pointer
-        transition-colors group
-        ${
-          active
-            ? "bg-neutral-300 text-black"
-            : "hover:bg-neutral-600 hover:text-white text-neutral-300"
-        }
-    `}
-    >
-      {icon}
-      <span
-        className={` overflow-hidden transition-all ${
-          expanded ? "w-52 ml-3" : "w-0"
-        }`}
-      >
-        {text}
-      </span>
-
-      {!expanded && (
-        <div
-          className={`
-          absolute left-full rounded-md px-2 py-1 ml-6
-          bg-neutral-300 text-black text-sm
-          invisible opacity-20 -translate-x-3 transition-all
-          group-hover:visible group-hover:opacity-100 group-hover:translate-x-0
-      `}
-        >
-          {text}
-        </div>
-      )}
-    </li>
-  );
-}

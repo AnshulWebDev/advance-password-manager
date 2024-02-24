@@ -1,5 +1,5 @@
 import React from "react";
-import { MobileSideBar, Sidebar, SidebarItem } from "../Components/Sidebar";
+import { MobileSideBar, Sidebar, SidebarItem } from "./Components/Sidebar";
 import { HiLockOpen } from "react-icons/hi2";
 import { Link } from "react-router-dom";
 import { MdDashboard } from "react-icons/md";

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { MobileSideBar, Sidebar, SidebarItem } from "../Components/Sidebar";
+import { MobileSideBar, Sidebar, SidebarItem } from "./Components/Sidebar";
 import { HiLockOpen } from "react-icons/hi2";
 import { MdDashboard } from "react-icons/md";
 import { HiUsers } from "react-icons/hi2";
@@ -137,28 +137,36 @@ const Dashboard = () => {
               Total Users
             </h5>
 
-            <p className="mb-3 font-medium text-3xl text-gray-200 ">{data?.totalUser}</p>
+            <p className="mb-3 font-medium text-3xl text-gray-200 ">
+              {data?.totalUser}
+            </p>
           </div>
           <div className=" w-56 text-center border mx-auto px-8 py-3 rounded-lg shadow bg-yellow-400 border-yellow-700">
             <h5 className="mb-2 text-2xl font-bold tracking-tight text-white">
               Total Password
             </h5>
 
-            <p className="mb-3 font-medium text-3xl text-gray-200 ">{data?.totalPassword}</p>
+            <p className="mb-3 font-medium text-3xl text-gray-200 ">
+              {data?.totalPassword}
+            </p>
           </div>
           <div className=" w-56 text-center border mx-auto px-8 py-3 rounded-lg shadow bg-blue-400 border-blue-700">
             <h5 className="mb-2 text-2xl font-bold tracking-tight text-white">
               Total Notes
             </h5>
 
-            <p className="mb-3 font-medium text-3xl text-gray-200 ">{data?.totalNotes}</p>
+            <p className="mb-3 font-medium text-3xl text-gray-200 ">
+              {data?.totalNotes}
+            </p>
           </div>
           <div className=" w-56 text-center border mx-auto px-8 py-3 rounded-lg shadow bg-green-400 border-green-700">
             <h5 className="mb-2 text-2xl font-bold tracking-tight text-white">
               Blocked Users
             </h5>
 
-            <p className="mb-3 font-medium text-3xl text-gray-200 ">{data?.totalLockedUser}</p>
+            <p className="mb-3 font-medium text-3xl text-gray-200 ">
+              {data?.totalLockedUser}
+            </p>
           </div>
         </div>
 
