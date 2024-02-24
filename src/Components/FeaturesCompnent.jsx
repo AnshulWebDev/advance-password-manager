@@ -1,4 +1,3 @@
-
 const FeaturesCompnent = ({ heading, content, img }) => {
   return (
     <div className="flex items-center gap-6 space-y-2">
@@ -10,7 +9,7 @@ const FeaturesCompnent = ({ heading, content, img }) => {
         <div className=" text-neutral-500 font-normal">{content}</div>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default FeaturesCompnent
+export default FeaturesCompnent;
