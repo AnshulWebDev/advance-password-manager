@@ -22,5 +22,65 @@
        transform: rotate(1turn);
     }
  }
+
+ /* styles.css (or within your Tailwind CSS configuration) */
+@keyframes cubeGridScaleDelay {
+   0%, 70%, 100% {
+     transform: scale3D(1, 1, 1);
+   }
+   35% {
+     transform: scale3D(0, 0, 1);
+   }
+ }
+ 
+ .loader-square-8 {
+   width: 50px;
+   height: 50px;
+   display: grid;
+   grid-template-columns: repeat(3, 1fr);
+   gap: 1px;
+ }
+ 
+ .loader-square-8 > div {
+   background-color: #000000;
+   animation: cubeGridScaleDelay 1.3s infinite ease-in-out;
+ }
+ 
+ .loader-square-8 .cube1 {
+   animation-delay: 0.2s;
+ }
+ 
+ .loader-square-8 .cube2 {
+   animation-delay: 0.3s;
+ }
+ 
+ .loader-square-8 .cube3 {
+   animation-delay: 0.4s;
+ }
+ 
+ .loader-square-8 .cube4 {
+   animation-delay: 0.1s;
+ }
+ 
+ .loader-square-8 .cube5 {
+   animation-delay: 0.2s;
+ }
+ 
+ .loader-square-8 .cube6 {
+   animation-delay: 0.3s;
+ }
+ 
+ .loader-square-8 .cube7 {
+   animation-delay: 0s;
+ }
+ 
+ .loader-square-8 .cube8 {
+   animation-delay: 0.1s;
+ }
+ 
+ .loader-square-8 .cube9 {
+   animation-delay: 0.2s;
+ }
+ 
     
 @tailwind utilities;
