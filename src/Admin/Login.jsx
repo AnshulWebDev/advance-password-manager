@@ -30,7 +30,7 @@ const Login = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
-    await axios
+    await axios()
       .post(
         `${import.meta.env.VITE_BACKEND_URL}/api/admin/adminLogin`,
         {

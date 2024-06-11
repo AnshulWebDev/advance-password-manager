@@ -50,7 +50,7 @@ const Login = () => {
           maxAge: 36600,
         });
         toast.success(response.data.message);
-        navigate("/dashboard");
+        navigate("/vault");
       })
       .catch(function (error) {
         toast.error(error.response.data.message);
@@ -133,7 +133,9 @@ const Login = () => {
             </div>
             <div>Have no account yet?</div>
             <Link
-              className=" mt-3 p-2 w-7/12 rounded-full text-center text-[#BFAFF2] border border-[#BFAFF2] cursor-pointer"
+              className={` mt-3 p-2 w-7/12 rounded-full text-center text-[#BFAFF2] border border-[#BFAFF2]  ${
+                loading ? " cursor-not-allowed" : " cursor-pointer"
+              }`}
               href="/register"
             >
               Registration

@@ -13,7 +13,7 @@ const EmailOtpDetect = ({ Component }) => {
     if (isMyTokenExpired === true && !myDecodedToken) {
       return <Navigate to={"/login"} />;
     } else {
-      return <Navigate to={"/dashboard"} />;
+      return <Navigate to={"/vault"} />;
     }
   } else if (data) {
     const myDecodedData = decodeToken(data);

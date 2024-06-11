@@ -36,10 +36,10 @@ const Notes = () => {
         <meta name="description" content="" />
       </Helmet>
       <Sidebar>
-        <Link to={"/dashboard"}>
+        <Link to={"/vault"}>
           <SidebarItem
             icon={<PiVaultLight className=" w-5 h-5" />}
-            text={"Dashboard"}
+            text={"Vault"}
           />
         </Link>
         <Link to={"/notes"}>

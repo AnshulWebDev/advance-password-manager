@@ -1,6 +1,5 @@
 import { Route, Routes } from "react-router-dom";
 import Login from "./Pages/Login";
-import Dashboard from "./Pages/Dashboard";
 import Register from "./Pages/Register";
 import { HelmetProvider } from "react-helmet-async";
 import EmailVerify from "./Pages/EmailVerify";
@@ -21,6 +20,7 @@ import AdminSetting from "./Admin/Setting";
 import Notes from "./Pages/Notes";
 import Settings from "./Pages/Settings";
 import Generator from "./Pages/Generator";
+import Vault from "./Pages/Vault";
 const App = () => {
   return (
     <HelmetProvider>
@@ -37,7 +37,7 @@ const App = () => {
         />
         <Route path="/privacy-policy" element={<PrivacyPolicy />} />
         {/* User Routes */}
-        <Route path="/dashboard" element={<Auth Component={Dashboard} />} />
+        <Route path="/vault" element={<Auth Component={Vault} />} />
         <Route path="/notes" element={<Auth Component={Notes} />} />
         <Route path="/generator" element={<Auth Component={Generator} />} />
         <Route path="/settings" element={<Auth Component={Settings} />} />
