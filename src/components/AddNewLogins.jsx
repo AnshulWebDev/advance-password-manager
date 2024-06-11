@@ -11,7 +11,7 @@ const AddNewLogins = ({ isOpen, onClose, onConfirm }) => {
   });
 
   const [loader, setLoader] = useState(false);
-  const { New_LoginDetails, updateNewLoginDetails } = saveNewLoginsStore();
+  const { updateNewLoginDetails } = saveNewLoginsStore();
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prevData) => ({
@@ -43,7 +43,7 @@ const AddNewLogins = ({ isOpen, onClose, onConfirm }) => {
       }));
       setLoader(false);
     } catch (error) {
-      toast.error(error.response?.data?.message || "An error occurred");
+      toast.error(error.response.data.message || "An error occurred");
       setLoader(false);
     }
   };
@@ -60,6 +60,13 @@ const AddNewLogins = ({ isOpen, onClose, onConfirm }) => {
     e.preventDefault();
     updateNewLoginDetails({ formData });
     onConfirm();
+    isOpen
+      ? setFormData({
+          username: "",
+          password: "",
+          website: "",
+        })
+      : "";
   };
   return (
     <div className={`fixed inset-0 z-50 ${isOpen ? "" : "hidden"}`}>

@@ -52,20 +52,72 @@ const Vault = () => {
   const [checkVpin, setCheckVpin] = useState(false);
   const [getSavedPasswd, setGetSavedPasswd] = useState([]);
   const [errorMessage, setErrorMessage] = useState("");
-  const cookies = new Cookies();
-  const token = cookies.get("token") || localStorage.getItem("token");
+  const [currentEditId, setCurrentEditId] = useState(null);
+
+  // const cookies = new Cookies();
   const { New_LoginDetails } = saveNewLoginsStore();
   const handelSearch = (value) => {
     setSearchInput(value);
     console.log(searchInput);
   };
-
-  // Edit Existing Logins
-  const handleEditPassUname = () => {
-    setEditPasswdUsername((prev) => !prev);
+  const getAllPassword = async () => {
+    setLoader(true);
+    //   const token = cookies.get("token") || localStorage.getItem("token");
+    await axios
+      .post(
+        `${import.meta.env.VITE_BACKEND_URL}/api/passwordVault/getAllPasswd`,
+        "",
+        {
+          withCredentials: true,
+          credentials: "include",
+          headers: {
+            Authorization: `Bearer ${v_Pin.data}`,
+          },
+        }
+      )
+      .then(function (response) {
+        //   console.log(response.data.data);
+        setGetSavedPasswd(response.data.data);
+        setLoader(false);
+      })
+      .catch(function (error) {
+        setErrorMessage(error.response.data.message);
+        //   console.log(error.response.data.message);
+      });
   };
-  const handleSavePassUname = () => {
+
+  //* Edit Existing Logins
+  const handleEditPassUname = (id) => {
+    setEditPasswdUsername((prev) => !prev);
+    setCurrentEditId(id);
+  };
+  const handleSavePassUname = async (data) => {
     // Close the modal and perform logout
+    // console.log(data);
+    // console.log(currentEditId)
+    try {
+      setLoader(true);
+      const response = await axios.put(
+        `${
+          import.meta.env.VITE_BACKEND_URL
+        }/api/passwordVault/updateSavedPasswd/${currentEditId}`,
+        data,
+        {
+          withCredentials: true,
+          credentials: "include",
+          headers: {
+            Authorization: `Bearer ${v_Pin.data}`,
+          },
+        }
+      );
+      // console.log(response);
+      toast.success(response.data.message); // Close the modal
+      getAllPassword();
+      setLoader(false);
+    } catch (error) {
+      toast.error(error.response.data.message || "An error occurred");
+      setLoader(false);
+    }
     setEditPasswdUsername(false);
   };
 
@@ -87,62 +139,36 @@ const Vault = () => {
     try {
       const response = await axios.post(
         `${import.meta.env.VITE_BACKEND_URL}/api/passwordVault/createPasswd`,
-        New_LoginDetails,
+        New_LoginDetails.formData,
         {
           withCredentials: true,
           credentials: "include",
           headers: {
-            Authorization: `Bearer ${token}`,
+            Authorization: `Bearer ${v_Pin.data}`,
           },
         }
       );
-      setFormData((prevData) => ({
-        ...prevData,
-        password: response.data.data,
-      }));
-      setLoader(false);
+      // console.log(response);
+      toast.success(response.data.message);
+      setAddNewLogin(false); // Close the modal
+      getAllPassword();
     } catch (error) {
-      toast.error(error.response?.data?.message || "An error occurred");
+      toast.error(error.response.data.message || "An error occurred");
+      setAddNewLogin(false);
       setLoader(false);
     }
-    setAddNewLogin(false);
   };
-
   const handleNewLoginCancel = () => {
     setAddNewLogin(false);
   };
 
+  //* refresh all password
   useEffect(() => {
     if (!v_Pin.data) {
       setCheckVpin(false);
     } else if (v_Pin.data) {
       setCheckVpin(true);
     }
-    const getAllPassword = async () => {
-      setLoader(true);
-      //   const token = cookies.get("token") || localStorage.getItem("token");
-      await axios
-        .post(
-          `${import.meta.env.VITE_BACKEND_URL}/api/passwordVault/getAllPasswd`,
-          "",
-          {
-            withCredentials: true,
-            credentials: "include",
-            headers: {
-              Authorization: `Bearer ${v_Pin.data}`,
-            },
-          }
-        )
-        .then(function (response) {
-          //   console.log(response.data.data);
-          setGetSavedPasswd(response.data.data);
-          setLoader(false);
-        })
-        .catch(function (error) {
-          setErrorMessage(error.response.data.message);
-          //   console.log(error.response.data.message);
-        });
-    };
     getAllPassword();
   }, []);
   return (
@@ -238,7 +264,7 @@ const Vault = () => {
                   {getSavedPasswd.map((value, index) => (
                     <>
                       <div
-                        key={value._id}
+                        key={index}
                         className=" w-full flex items-center justify-between border-t border-neutral-400 py-2.5 px-4 hover:bg-neutral-100 transition-all cursor-pointer overflow-y-auto no-scrollbar"
                       >
                         <img className="w-5 h-5" src={value.websiteFavicon} />
@@ -252,7 +278,7 @@ const Vault = () => {
                         </div>
                         <div className=" w-6 h-6 flex items-center justify-center">
                           <FaRegEdit
-                            onClick={handleEditPassUname}
+                            onClick={() => handleEditPassUname(value._id)}
                             className="w-5 h-5 cursor-pointer"
                           />
                         </div>
@@ -262,6 +288,11 @@ const Vault = () => {
                         onClose={handleEditPassUnameCancel}
                         onConfirm={handleSavePassUname}
                         onTrash={handleEditPassUnameTrash}
+                        onUserData={
+                          getSavedPasswd.find(
+                            (item) => item._id === currentEditId
+                          ) || {}
+                        }
                       />
                     </>
                   ))}
@@ -275,8 +306,8 @@ const Vault = () => {
       </main>
       <AddNewLogins
         isOpen={addNewLogin}
-        onClose={handleNewLoginCancel}
         onConfirm={handleSaveNewLogin}
+        onClose={handleNewLoginCancel}
       />
     </main>
   );

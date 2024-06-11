@@ -1,11 +1,72 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { MdOutlineContentCopy } from "react-icons/md";
 import { FaEyeSlash } from "react-icons/fa";
 import { FaTrashAlt } from "react-icons/fa";
 import { FaEye } from "react-icons/fa";
 import { RxOpenInNewWindow } from "react-icons/rx";
-const EditPasswdUsername = ({ isOpen, onClose, onConfirm,onTrash }) => {
-    
+import CryptoJS from "crypto-js";
+import useVaultPinStore from "../Zustand/Vault_Pin";
+const EditPasswdUsername = ({
+  isOpen,
+  onClose,
+  onConfirm,
+  onTrash,
+  onUserData,
+}) => {
+  const [formData, setFormData] = useState({
+    name: "",
+    username: "",
+    password: "",
+    website: "",
+  });
+  const { v_Pin } = useVaultPinStore();
+  const [showPasswd, setShowPasswd] = useState(false);
+  useEffect(() => {
+    setFormData({
+      name: onUserData.name,
+      username: onUserData.username,
+      password: onUserData.password,
+      website: onUserData.website,
+    });
+  }, [onUserData]);
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prevData) => ({
+      ...prevData,
+      [name]: value,
+    }));
+  };
+
+  const handleConfirm = () => {
+    onConfirm(formData, onUserData._id); // Pass formData and _id
+  };
+  const showPasswdHandler = () => {
+    setShowPasswd((prev) => !prev);
+    if (!showPasswd) {
+      const decode = CryptoJS.AES.decrypt(
+        v_Pin.data,
+        import.meta.env.VITE_SECUREPIN
+      ).toString(CryptoJS.enc.Utf8);
+      const decodePasswd = CryptoJS.AES.decrypt(
+        onUserData.password,
+        decode
+      ).toString(CryptoJS.enc.Utf8);
+      setFormData((prevData) => ({
+        ...prevData,
+        password: decodePasswd,
+      }));
+    } else {
+      setFormData((prevData) => ({
+        ...prevData,
+        password: onUserData.password,
+      }));
+    }
+  };
+  const handleCancle = () => {
+    setShowPasswd(false);
+    onClose();
+  };
   return (
     <div className={`fixed inset-0 z-50 ${isOpen ? "" : "hidden"}`}>
       <div className="flex items-center justify-center min-h-screen">
@@ -25,6 +86,9 @@ const EditPasswdUsername = ({ isOpen, onClose, onConfirm,onTrash }) => {
                 <input
                   className=" bg-neutral-50 focus:outline-none border  border-neutral-400 rounded-md p-2"
                   type="text"
+                  name="name"
+                  value={formData.name}
+                  onChange={handleChange}
                 />
               </div>
               <div className=" flex flex-col">
@@ -33,6 +97,9 @@ const EditPasswdUsername = ({ isOpen, onClose, onConfirm,onTrash }) => {
                   <input
                     className=" bg-neutral-50 w-[90%] focus:outline-none border  border-neutral-400 rounded-l-md p-2"
                     type="text"
+                    name="username"
+                    value={formData.username}
+                    onChange={handleChange}
                   />
                   <div className="bg-neutral-50 w-12 h-12 border flex items-center justify-center border-neutral-400 rounded-r-md">
                     <MdOutlineContentCopy className=" w-7 h-7" />
@@ -43,14 +110,31 @@ const EditPasswdUsername = ({ isOpen, onClose, onConfirm,onTrash }) => {
                 <label htmlFor="">Password</label>
                 <div className=" flex w-full">
                   <input
-                    className=" bg-neutral-50 w-[80%] focus:outline-none border  border-neutral-400 rounded-l-md p-2"
-                    type="password"
+                    className={` bg-neutral-50 w-[80%] focus:outline-none border  border-neutral-400 rounded-l-md p-2 ${
+                      showPasswd ? "" : "cursor-not-allowed"
+                    }`}
+                    type={showPasswd ? "text" : "password"}
+                    name="password"
+                    value={formData.password}
+                    onChange={handleChange}
+                    disabled={showPasswd ? false : true}
                   />
-                  <div className="bg-neutral-50 w-12 h-12 border flex items-center justify-center border-neutral-400">
-                    <FaEyeSlash className=" w-7 h-7" />
+                  <div
+                    className="bg-neutral-50 w-12 h-12 border cursor-pointer flex items-center justify-center border-neutral-400"
+                    onClick={showPasswdHandler}
+                  >
+                    {showPasswd ? (
+                      <FaEye className=" w-7 h-7" />
+                    ) : (
+                      <FaEyeSlash className=" w-7 h-7" />
+                    )}
                   </div>
                   <div className="bg-neutral-50 w-12 h-12 border flex items-center justify-center border-neutral-400 rounded-r-md">
-                    <MdOutlineContentCopy className=" w-7 h-7" />
+                    <MdOutlineContentCopy
+                      className={`${
+                        showPasswd ? "cursor-pointer" : "cursor-not-allowed"
+                      } w-7 h-7`}
+                    />
                   </div>
                 </div>
               </div>
@@ -60,6 +144,9 @@ const EditPasswdUsername = ({ isOpen, onClose, onConfirm,onTrash }) => {
                   <input
                     className=" bg-neutral-50 w-[80%] focus:outline-none border  border-neutral-400 rounded-l-md p-2"
                     type="text"
+                    name="website"
+                    value={formData.website}
+                    onChange={handleChange}
                   />
                   <div className="bg-neutral-50 w-12 h-12 border flex items-center justify-center border-neutral-400">
                     <RxOpenInNewWindow className=" w-7 h-7" />
@@ -71,8 +158,9 @@ const EditPasswdUsername = ({ isOpen, onClose, onConfirm,onTrash }) => {
               </div>
 
               <div>
-                <p>Updated: Aug 2, 2022, 2:49:56 PM</p>
-                <p>Created: Aug 2, 2022, 2:49:56 PM</p>
+                <p>Created: {onUserData.Created}</p>
+                <p>Updated: {onUserData.Updated ? onUserData.Updated : "NA"}</p>
+                <p>Password History: {onUserData.passwordHistory}</p>
               </div>
             </div>
           </div>
@@ -81,13 +169,13 @@ const EditPasswdUsername = ({ isOpen, onClose, onConfirm,onTrash }) => {
             <div>
               <button
                 className="px-4 py-2 text-white hover:text-neutral-100 bg-black rounded-md"
-                onClick={onConfirm}
+                onClick={handleConfirm}
               >
                 Save
               </button>
               <button
                 className="ml-2 px-4 py-2 text-black border hover:bg-neutral-100 border-neutral-500 rounded-md"
-                onClick={onClose}
+                onClick={handleCancle}
               >
                 Cancel
               </button>
