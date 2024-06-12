@@ -93,8 +93,6 @@ const Vault = () => {
   };
   const handleSavePassUname = async (data) => {
     // Close the modal and perform logout
-    // console.log(data);
-    // console.log(currentEditId)
     try {
       setLoader(true);
       const response = await axios.put(
@@ -125,7 +123,30 @@ const Vault = () => {
     // Close the modal without logging out
     setEditPasswdUsername(false);
   };
-  const handleEditPassUnameTrash = () => {
+  const handleEditPassUnameTrash = async () => {
+    try {
+      setLoader(true);
+      const response = await axios.post(
+        `${
+          import.meta.env.VITE_BACKEND_URL
+        }/api/passwordVault/deletePasswd/${currentEditId}`,
+        " ",
+        {
+          withCredentials: true,
+          credentials: "include",
+          headers: {
+            Authorization: `Bearer ${v_Pin.data}`,
+          },
+        }
+      );
+      // console.log(response);
+      toast.success(response.data.message); // Close the modal
+      getAllPassword();
+      setLoader(false);
+    } catch (error) {
+      toast.error(error.response.data.message || "An error occurred");
+      setLoader(false);
+    }
     setEditPasswdUsername(false);
   };
 

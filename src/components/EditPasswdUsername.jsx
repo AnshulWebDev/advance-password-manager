@@ -6,6 +6,8 @@ import { FaEye } from "react-icons/fa";
 import { RxOpenInNewWindow } from "react-icons/rx";
 import CryptoJS from "crypto-js";
 import useVaultPinStore from "../Zustand/Vault_Pin";
+import { toast } from "react-hot-toast";
+
 const EditPasswdUsername = ({
   isOpen,
   onClose,
@@ -21,6 +23,7 @@ const EditPasswdUsername = ({
   });
   const { v_Pin } = useVaultPinStore();
   const [showPasswd, setShowPasswd] = useState(false);
+  const [text, setText] = useState("");
   useEffect(() => {
     setFormData({
       name: onUserData.name,
@@ -67,6 +70,35 @@ const EditPasswdUsername = ({
     setShowPasswd(false);
     onClose();
   };
+  const usernameCopyToClipboard = async () => {
+    setText(formData.username);
+    try {
+      await navigator.clipboard.writeText(text);
+      toast.success("Username copied");
+    } catch (err) {
+      toast.error("Failed to copy");
+    }
+  };
+  const passwordCopyToClipboard = async () => {
+    if (showPasswd) {
+      setText(formData.password);
+      try {
+        await navigator.clipboard.writeText(text);
+        toast.success("Password copied");
+      } catch (err) {
+        toast.error("Failed to copy");
+      }
+    }
+  };
+  const urlCopyToClipboard = async () => {
+    setText(formData.website);
+    try {
+      await navigator.clipboard.writeText(text);
+      toast.success("url copied");
+    } catch (err) {
+      toast.error("Failed to copy");
+    }
+  };
   return (
     <div className={`fixed inset-0 z-50 ${isOpen ? "" : "hidden"}`}>
       <div className="flex items-center justify-center min-h-screen">
@@ -101,8 +133,11 @@ const EditPasswdUsername = ({
                     value={formData.username}
                     onChange={handleChange}
                   />
-                  <div className="bg-neutral-50 w-12 h-12 border flex items-center justify-center border-neutral-400 rounded-r-md">
-                    <MdOutlineContentCopy className=" w-7 h-7" />
+                  <div
+                    className="bg-neutral-50 w-12 h-12 border flex items-center justify-center border-neutral-400 rounded-r-md"
+                    onClick={usernameCopyToClipboard}
+                  >
+                    <MdOutlineContentCopy className=" w-7 h-7 cursor-pointer" />
                   </div>
                 </div>
               </div>
@@ -129,7 +164,10 @@ const EditPasswdUsername = ({
                       <FaEyeSlash className=" w-7 h-7" />
                     )}
                   </div>
-                  <div className="bg-neutral-50 w-12 h-12 border flex items-center justify-center border-neutral-400 rounded-r-md">
+                  <div
+                    className="bg-neutral-50 w-12 h-12 border flex items-center justify-center border-neutral-400 rounded-r-md"
+                    onClick={passwordCopyToClipboard}
+                  >
                     <MdOutlineContentCopy
                       className={`${
                         showPasswd ? "cursor-pointer" : "cursor-not-allowed"
@@ -149,10 +187,19 @@ const EditPasswdUsername = ({
                     onChange={handleChange}
                   />
                   <div className="bg-neutral-50 w-12 h-12 border flex items-center justify-center border-neutral-400">
-                    <RxOpenInNewWindow className=" w-7 h-7" />
+                    <a
+                      href={formData.website}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      <RxOpenInNewWindow className=" w-7 h-7" />
+                    </a>
                   </div>
-                  <div className="bg-neutral-50 w-12 h-12 border flex items-center justify-center border-neutral-400 rounded-r-md">
-                    <MdOutlineContentCopy className=" w-7 h-7" />
+                  <div
+                    className="bg-neutral-50 w-12 h-12 border flex items-center justify-center border-neutral-400 rounded-r-md"
+                    onClick={urlCopyToClipboard}
+                  >
+                    <MdOutlineContentCopy className=" w-7 h-7 cursor-pointer" />
                   </div>
                 </div>
               </div>
