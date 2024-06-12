@@ -46,7 +46,7 @@ const Vault = () => {
   const Profile = JSON.parse(localStorage.getItem("profile"));
   const { v_Pin } = useVaultPinStore();
   const [loader, setLoader] = useState(false);
-  const [searchInput, setSearchInput] = useState("");
+  // const [searchInput, setSearchInput] = useState([]);
   const [editPasswdUsername, setEditPasswdUsername] = useState(false);
   const [addNewLogin, setAddNewLogin] = useState(false);
   const [checkVpin, setCheckVpin] = useState(false);
@@ -56,10 +56,7 @@ const Vault = () => {
 
   // const cookies = new Cookies();
   const { New_LoginDetails } = saveNewLoginsStore();
-  const handelSearch = (value) => {
-    setSearchInput(value);
-    console.log(searchInput);
-  };
+
   const getAllPassword = async () => {
     setLoader(true);
     //   const token = cookies.get("token") || localStorage.getItem("token");
@@ -170,12 +167,14 @@ const Vault = () => {
         }
       );
       // console.log(response);
-      toast.success(response.data.message);
-      setAddNewLogin(false); // Close the modal
-      getAllPassword();
-    } catch (error) {
-      toast.error(error.response.data.message || "An error occurred");
       setAddNewLogin(false);
+      toast.success(response.data.message);
+      getAllPassword();
+      setLoader(false);
+      setAddNewLogin(false); // Close the modal
+    } catch (error) {
+      setAddNewLogin(false);
+      toast.error(error.response.data.message || "An error occurred");
       setLoader(false);
     }
   };
@@ -192,6 +191,18 @@ const Vault = () => {
     }
     getAllPassword();
   }, []);
+
+  // *Search Password
+  const handelSearch = (value) => {
+    if (!value) {
+      getAllPassword();
+    } else {
+      const searchResult = getSavedPasswd.filter((passwd) =>
+        new RegExp(value, "i").test(passwd.name)
+      );
+      setGetSavedPasswd(searchResult);
+    }
+  };
   return (
     <main className=" flex h-screen overflow-hidden pr-4 py-4 bg-black">
       <Helmet>
@@ -233,9 +244,9 @@ const Vault = () => {
       <main className=" w-full bg-white rounded-3xl p-4 ">
         {/* <EnterVaultPin />         */}
         {checkVpin ? (
-          <div className=" w-full flex flex-wrap justify-center lg:flex-nowrap gap-x-10 gap-y-7 transition-all">
-            {/* Left filter section */}
-            <div className="w-full h-fit flex flex-col gap-2 lg:w-fit border border-neutral-500 rounded-md p-4">
+          <div className="w-full flex flex-col justify-center lg:items-center gap-y-3 transition-all">
+            {/* filter section */}
+            <div className="w-full h-fit flex flex-col gap-2 lg:max-w-xl border border-neutral-500 rounded-md p-4">
               <p className=" uppercase font-semibold">Filters</p>
               <div className=" flex items-center gap-2 shadow-md p-2.5 rounded-lg">
                 <div className=" w-fit">
@@ -248,18 +259,9 @@ const Vault = () => {
                   onChange={(e) => handelSearch(e.target.value)}
                 />
               </div>
-              <div className=" flex items-center gap-2 cursor-pointer hover:text-neutral-600">
-                <FaRegStar />
-                Favorites
-              </div>
-              <div className=" flex items-center gap-2 cursor-pointer hover:text-neutral-600">
-                <MdPassword />
-                Login
-              </div>
             </div>
-
-            {/* Right Password section */}
-            <div className="w-full h-96 xsm:h-[24rem] md:h-[25rem] lg:h-[35rem] lg:max-w-xl flex flex-col p-4 border border-neutral-500 rounded-md">
+            {/* Password section */}
+            <div className="w-full h-[70vh] lg:max-w-xl flex flex-col p-4 border border-neutral-500 rounded-md">
               <div className=" flex justify-between">
                 <p className="uppercase font-semibold ">My vault</p>
                 <button className="font-semibold text-2xl relative rounded-md transition-transform group hover:text-neutral-600">
