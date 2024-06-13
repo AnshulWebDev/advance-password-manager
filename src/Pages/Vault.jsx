@@ -23,15 +23,12 @@ const MobileSidebarItems = [
 import { Link } from "react-router-dom";
 import axios from "axios";
 import { toast } from "react-hot-toast";
-import { Cookies } from "react-cookie";
+// import { Cookies } from "react-cookie";
 import { PiVaultLight } from "react-icons/pi";
 import { GrDocumentNotes } from "react-icons/gr";
 import { RiAiGenerate } from "react-icons/ri";
 import { IoSettingsOutline } from "react-icons/io5";
-import SquareLoader from "../components/SquareLoader";
 import { FaSearch } from "react-icons/fa";
-import { MdPassword } from "react-icons/md";
-import { FaRegStar } from "react-icons/fa";
 import { IoMdAdd } from "react-icons/io";
 import { FaRegEdit } from "react-icons/fa";
 import EditPasswdUsername from "../components/EditPasswdUsername";
@@ -171,7 +168,6 @@ const Vault = () => {
       toast.success(response.data.message);
       getAllPassword();
       setLoader(false);
-      setAddNewLogin(false); // Close the modal
     } catch (error) {
       setAddNewLogin(false);
       toast.error(error.response.data.message || "An error occurred");

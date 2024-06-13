@@ -12,7 +12,7 @@ const Contact = () => {
           </div>
           <div className=" mt-4 text-neutral-500 ">
             Contact us on{" "}
-            <a href="mailto:admin@devglimpse.com">admin@devglimpse.com</a>
+            <a href="mailto:support@cleverpentester.com">support@cleverpentester.com</a>
           </div>
           <div className=" text-neutral-500 ">We’re always happy to help!</div>
 
