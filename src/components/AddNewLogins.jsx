@@ -58,7 +58,7 @@ const AddNewLogins = ({ isOpen, onClose, onConfirm }) => {
   };
   const handleSaveData = (e) => {
     e.preventDefault();
-    updateNewLoginDetails({ formData });
+    localStorage.setItem("New_LoginDetails",  JSON.stringify(formData));;
     onConfirm();
     isOpen
       ? setFormData({

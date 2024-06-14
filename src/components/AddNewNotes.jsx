@@ -1,7 +1,5 @@
 import React, { useState } from "react";
-import axios from "axios";
-import { toast } from "react-hot-toast";
-import saveNoteStore from "../Zustand/AddNewNote";
+
 const AddNewNotes = ({ isOpen, onClose, onConfirm }) => {
   const [formData, setFormData] = useState({
     name: "",
@@ -9,9 +7,9 @@ const AddNewNotes = ({ isOpen, onClose, onConfirm }) => {
     favorite: false,
     lockNote: false,
   });
-  const { updateNewNote } = saveNoteStore();
 
- //* Form handling   
+
+  //* Form handling
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prevData) => ({
@@ -31,14 +29,14 @@ const AddNewNotes = ({ isOpen, onClose, onConfirm }) => {
     setFormData({
       name: "",
       note: "",
-      favorite: "",
-      lockNote: "",
+      favorite: false,
+      lockNote: false,
     });
     onClose();
   };
-  const handleSaveData = (e) => {
+  const handleSaveData = async (e) => {
     e.preventDefault();
-    updateNewNote({ formData });
+    localStorage.setItem("New_Note",  JSON.stringify(formData));
     onConfirm();
     isOpen
       ? setFormData({

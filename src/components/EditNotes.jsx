@@ -1,12 +1,8 @@
 import React, { useEffect, useState } from "react";
-import { MdOutlineContentCopy } from "react-icons/md";
-import { FaEyeSlash, FaTrashAlt, FaEye } from "react-icons/fa";
-import { RxOpenInNewWindow } from "react-icons/rx";
-import CryptoJS from "crypto-js";
+import { FaTrashAlt } from "react-icons/fa";
 import useVaultPinStore from "../Zustand/Vault_Pin";
 import { toast } from "react-hot-toast";
 import axios from "axios";
-
 import { CiUnlock } from "react-icons/ci";
 const EditNotes = ({ isOpen, onClose, onConfirm, onTrash, onUserData }) => {
   const [formData, setFormData] = useState({
@@ -37,7 +33,11 @@ const EditNotes = ({ isOpen, onClose, onConfirm, onTrash, onUserData }) => {
     const unlockNote = () => {
       onConfirm(formData, onUserData._id); // Pass formData and _id
       setViewNote(false);
-      setFormData({});
+      setFormData({
+        name: "",
+        note: "",
+        favorite: false,
+      });
     };
     if (onUserData.encrypt) {
       viewNote ? unlockNote() : toast.error("unlock note first");
@@ -80,14 +80,14 @@ const EditNotes = ({ isOpen, onClose, onConfirm, onTrash, onUserData }) => {
 
   useEffect(() => {
     setFormData({
-      name: onUserData.name || "",
-      note: onUserData.notes || "", // Ensure note is mapped to notes
-      favorite: onUserData.favorite || false,
+      name: onUserData.name,
+      note: onUserData.notes, // Ensure note is mapped to notes
+      favorite: onUserData.favorite,
     });
   }, [onUserData]);
   const handleOnTrash = () => {
     onTrash();
-    setFormData({});
+    setFormData({ name: "", note: "", favorite: false });
   };
   return (
     <div className={`fixed inset-0 z-50 ${isOpen ? "" : "hidden"}`}>

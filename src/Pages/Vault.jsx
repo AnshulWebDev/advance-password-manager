@@ -36,8 +36,6 @@ import AddNewLogins from "../components/AddNewLogins";
 import EnterVaultPin from "../components/EnterVaultPin";
 import useVaultPinStore from "../Zustand/Vault_Pin";
 import SkeletonLoader from "../components/SkeletonLoader";
-import { MdErrorOutline } from "react-icons/md";
-import saveNewLoginsStore from "../Zustand/AddNewLoginDetails";
 
 const Vault = () => {
   const Profile = JSON.parse(localStorage.getItem("profile"));
@@ -48,11 +46,7 @@ const Vault = () => {
   const [addNewLogin, setAddNewLogin] = useState(false);
   const [checkVpin, setCheckVpin] = useState(false);
   const [getSavedPasswd, setGetSavedPasswd] = useState([]);
-  const [errorMessage, setErrorMessage] = useState("");
   const [currentEditId, setCurrentEditId] = useState(null);
-
-  // const cookies = new Cookies();
-  const { New_LoginDetails } = saveNewLoginsStore();
 
   const getAllPassword = async () => {
     setLoader(true);
@@ -75,7 +69,7 @@ const Vault = () => {
         setLoader(false);
       })
       .catch(function (error) {
-        setErrorMessage(error.response.data.message);
+        toast.error(error.response.data.message);
         //   console.log(error.response.data.message);
       });
   };
@@ -151,10 +145,15 @@ const Vault = () => {
   };
   const handleSaveNewLogin = async () => {
     //* Close the modal
+    const formData = JSON.parse(localStorage.getItem("New_LoginDetails"));
     try {
       const response = await axios.post(
         `${import.meta.env.VITE_BACKEND_URL}/api/passwordVault/createPasswd`,
-        New_LoginDetails.formData,
+        {
+          username: formData.username,
+          password: formData.password,
+          website: formData.website,
+        },
         {
           withCredentials: true,
           credentials: "include",
@@ -164,13 +163,15 @@ const Vault = () => {
         }
       );
       // console.log(response);
-      setAddNewLogin(false);
+      localStorage.removeItem("New_LoginDetails");
       toast.success(response.data.message);
       getAllPassword();
+      setAddNewLogin(false);
       setLoader(false);
     } catch (error) {
-      setAddNewLogin(false);
+      localStorage.removeItem("New_LoginDetails");
       toast.error(error.response.data.message || "An error occurred");
+      setAddNewLogin(false);
       setLoader(false);
     }
   };
@@ -180,13 +181,24 @@ const Vault = () => {
 
   //* refresh all password
   useEffect(() => {
-    if (!v_Pin.data) {
+    const vPinExpiry = v_Pin?.expiry; // Extract expiry time from v_Pin
+    const currentTime = Date.now();
+    const hasReloaded = localStorage.getItem("hasReloaded"); // Get reload flag from localStorage
+
+    if (currentTime > vPinExpiry) {
       setCheckVpin(false);
-    } else if (v_Pin.data) {
+      if (!hasReloaded) {
+        // Only reload if it hasn't already
+        localStorage.setItem("hasReloaded", "true");
+        window.location.reload();
+      }
+    } else if (v_Pin?.data) {
       setCheckVpin(true);
+      localStorage.removeItem("hasReloaded"); // Clear the flag if the pin is valid
     }
+
     getAllPassword();
-  }, []);
+  }, [v_Pin]);
 
   // *Search Password
   const handelSearch = (value) => {
@@ -272,14 +284,6 @@ const Vault = () => {
                 <SkeletonLoader />
               ) : (
                 <div className="mt-4 overflow-y-auto no-scrollbar">
-                  {errorMessage ? (
-                    <div className="text-red-500 w-full flex items-center gap-1">
-                      <MdErrorOutline />
-                      {errorMessage}
-                    </div>
-                  ) : (
-                    ""
-                  )}
                   {getSavedPasswd.map((value, index) => (
                     <>
                       <div

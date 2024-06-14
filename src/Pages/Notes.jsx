@@ -30,17 +30,14 @@ import { RiAiGenerate } from "react-icons/ri";
 import { IoSettingsOutline } from "react-icons/io5";
 import { FaSearch } from "react-icons/fa";
 import { IoMdAdd } from "react-icons/io";
-import { FaRegEdit } from "react-icons/fa";
 import EnterVaultPin from "../components/EnterVaultPin";
 import useVaultPinStore from "../Zustand/Vault_Pin";
 import NoteSkeletonLoader from "../components/NoteSkeletonLoader";
-import { MdErrorOutline } from "react-icons/md";
-import saveNoteStore from "../Zustand/AddNewNote";
 import AddNewNotes from "../components/AddNewNotes";
 import EditNotes from "../components/EditNotes";
 import { CiStickyNote } from "react-icons/ci";
-import { MdOutlineContentCopy } from "react-icons/md";
-
+import { FaRegStar } from "react-icons/fa";
+import { FaStar } from "react-icons/fa";
 const Notes = () => {
   const Profile = JSON.parse(localStorage.getItem("profile"));
   const { v_Pin } = useVaultPinStore();
@@ -49,11 +46,9 @@ const Notes = () => {
   const [addNewNotes, setAddNewNotes] = useState(false);
   const [checkVpin, setCheckVpin] = useState(false);
   const [getNotes, setGetNotes] = useState([]);
-  const [errorMessage, setErrorMessage] = useState("");
   const [currentEditId, setCurrentEditId] = useState(null);
-  const [text, setText] = useState("");
+  const [isfavorite, setIsFavorite] = useState(false);
   // const cookies = new Cookies();
-  const { New_Note } = saveNoteStore();
   const getAllNote = async () => {
     setLoader(true);
     //   const token = cookies.get("token") || localStorage.getItem("token");
@@ -71,7 +66,7 @@ const Notes = () => {
         setLoader(false);
       })
       .catch(function (error) {
-        setErrorMessage(error.response.data.message);
+        toast.error(error.response.data.message);
         //   console.log(error.response.data.message);
       });
   };
@@ -102,13 +97,14 @@ const Notes = () => {
       // console.log(response);
       toast.success(response.data.message); // Close the modal
       getAllNote();
+
       setLoader(false);
     } catch (error) {
       toast.error(error.response.data.message || "An error occurred");
+
       setLoader(false);
     }
     setEditNotes(false);
-    // window.location.reload();
   };
 
   const handleEditNotesCancel = () => {
@@ -134,9 +130,11 @@ const Notes = () => {
       // console.log(response);
       toast.success(response.data.message); // Close the modal
       getAllNote();
+      localStorage.removeItem("New_Note");
       setLoader(false);
     } catch (error) {
       toast.error(error.response.data.message || "An error occurred");
+      localStorage.removeItem("New_Note");
       setLoader(false);
     }
     setEditNotes(false);
@@ -149,10 +147,16 @@ const Notes = () => {
   };
   const handleSaveNewNote = async () => {
     //* Close the modal
+    const formData = JSON.parse(localStorage.getItem("New_Note"));
     try {
       const response = await axios.post(
         `${import.meta.env.VITE_BACKEND_URL}/api/note/createNote`,
-        New_Note.formData,
+        {
+          name: formData.name,
+          note: formData.name,
+          favorite: formData.favorite,
+          lockNote: formData.lockNote,
+        },
         {
           withCredentials: true,
           credentials: "include",
@@ -165,26 +169,38 @@ const Notes = () => {
       setAddNewNotes(false);
       toast.success(response.data.message);
       getAllNote();
+      localStorage.removeItem("New_Note");
       setLoader(false);
     } catch (error) {
       setAddNewNotes(false);
       toast.error(error.response.data.message || "An error occurred");
+      localStorage.removeItem("New_Note");
       setLoader(false);
     }
   };
   const handleNewNoteCancel = () => {
     setAddNewNotes(false);
   };
-
   //* refresh all Note
   useEffect(() => {
-    if (!v_Pin.data) {
+    const vPinExpiry = v_Pin?.expiry; // Extract expiry time from v_Pin
+    const currentTime = Date.now();
+    const hasReloaded = localStorage.getItem("hasReloaded"); // Get reload flag from localStorage
+
+    if (currentTime > vPinExpiry) {
       setCheckVpin(false);
-    } else if (v_Pin.data) {
+      if (!hasReloaded) {
+        // Only reload if it hasn't already
+        localStorage.setItem("hasReloaded", "true");
+        window.location.reload();
+      }
+    } else if (v_Pin?.data) {
       setCheckVpin(true);
+      localStorage.removeItem("hasReloaded"); // Clear the flag if the pin is valid
     }
+
     getAllNote();
-  }, []);
+  }, [v_Pin]); // Add hasReloaded to the dependency array
   //* Search Note
   const handelSearch = (value) => {
     if (!value) {
@@ -197,6 +213,32 @@ const Notes = () => {
     }
   };
 
+  const handleFavorite = async () => {
+    setIsFavorite((prev) => !prev);
+    if (isfavorite) {
+      try {
+        const response = await axios.post(
+          `${import.meta.env.VITE_BACKEND_URL}/api/note/getFavoriteNote`,
+          "",
+          {
+            withCredentials: true,
+            credentials: "include",
+            headers: {
+              Authorization: `Bearer ${v_Pin.data}`,
+            },
+          }
+        );
+        // console.log(response);
+        setGetNotes(response.data.data);
+        setLoader(false);
+      } catch (error) {
+        toast.error(error.response.data.message || "An error occurred");
+        setLoader(false);
+      }
+    } else {
+      getAllNote();
+    }
+  };
   return (
     <main className=" flex h-screen overflow-hidden pr-4 py-4 bg-black">
       <Helmet>
@@ -241,7 +283,16 @@ const Notes = () => {
           <div className="w-full flex flex-col justify-center lg:items-center gap-y-3 transition-all">
             {/* filter section */}
             <div className="w-full h-fit flex flex-col gap-2 lg:max-w-xl border border-neutral-500 rounded-md p-4">
-              <p className=" uppercase font-semibold">Filters</p>
+              <div className=" flex justify-between">
+                <p className=" uppercase font-semibold">Filters</p>
+                <div onClick={handleFavorite}>
+                  {isfavorite ? (
+                    <FaRegStar className=" text-lg cursor-pointer" />
+                  ) : (
+                    <FaStar className=" text-lg cursor-pointer" />
+                  )}
+                </div>
+              </div>
               <div className=" flex items-center gap-2 shadow-md p-2.5 rounded-lg">
                 <div className=" w-fit">
                   <FaSearch />
@@ -270,14 +321,6 @@ const Notes = () => {
                 <NoteSkeletonLoader />
               ) : (
                 <div className="mt-4 overflow-y-auto no-scrollbar">
-                  {errorMessage ? (
-                    <div className="text-red-500 w-full flex items-center gap-1">
-                      <MdErrorOutline />
-                      {errorMessage}
-                    </div>
-                  ) : (
-                    ""
-                  )}
                   {getNotes.map((value, index) => (
                     <>
                       <div
