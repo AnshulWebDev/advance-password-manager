@@ -34,12 +34,13 @@ import { FaRegEdit } from "react-icons/fa";
 import EditPasswdUsername from "../components/EditPasswdUsername";
 import AddNewLogins from "../components/AddNewLogins";
 import EnterVaultPin from "../components/EnterVaultPin";
-import useVaultPinStore from "../Zustand/Vault_Pin";
+// import useVaultPinStore from "../Zustand/Vault_Pin";
 import SkeletonLoader from "../components/SkeletonLoader";
-
+import { useCookies } from "react-cookie";
 const Vault = () => {
   const Profile = JSON.parse(localStorage.getItem("profile"));
-  const { v_Pin } = useVaultPinStore();
+  const [cookies, setCookie, removeCookie] = useCookies(["cookie-name"]);
+  const v_Pin = cookies["v_pin"];
   const [loader, setLoader] = useState(false);
   // const [searchInput, setSearchInput] = useState([]);
   const [editPasswdUsername, setEditPasswdUsername] = useState(false);
@@ -59,7 +60,7 @@ const Vault = () => {
           withCredentials: true,
           credentials: "include",
           headers: {
-            Authorization: `Bearer ${v_Pin.data}`,
+            Authorization: `Bearer ${v_Pin}`,
           },
         }
       )
@@ -92,7 +93,7 @@ const Vault = () => {
           withCredentials: true,
           credentials: "include",
           headers: {
-            Authorization: `Bearer ${v_Pin.data}`,
+            Authorization: `Bearer ${v_Pin}`,
           },
         }
       );
@@ -123,7 +124,7 @@ const Vault = () => {
           withCredentials: true,
           credentials: "include",
           headers: {
-            Authorization: `Bearer ${v_Pin.data}`,
+            Authorization: `Bearer ${v_Pin}`,
           },
         }
       );
@@ -158,7 +159,7 @@ const Vault = () => {
           withCredentials: true,
           credentials: "include",
           headers: {
-            Authorization: `Bearer ${v_Pin.data}`,
+            Authorization: `Bearer ${v_Pin}`,
           },
         }
       );
@@ -169,9 +170,9 @@ const Vault = () => {
       setAddNewLogin(false);
       setLoader(false);
     } catch (error) {
-      localStorage.removeItem("New_LoginDetails");
-      toast.error(error.response.data.message || "An error occurred");
       setAddNewLogin(false);
+      toast.error(error.response.data.message || "An error occurred");
+      localStorage.removeItem("New_LoginDetails");
       setLoader(false);
     }
   };
@@ -181,24 +182,26 @@ const Vault = () => {
 
   //* refresh all password
   useEffect(() => {
-    const vPinExpiry = v_Pin?.expiry; // Extract expiry time from v_Pin
-    const currentTime = Date.now();
-    const hasReloaded = localStorage.getItem("hasReloaded"); // Get reload flag from localStorage
+    // console.log("Running useEffect...");
+    const hasReloaded = localStorage.getItem("hasReloaded");
+    // console.log("hasReloaded:", hasReloaded);
+    // console.log("v_Pin:", v_Pin);
 
-    if (currentTime > vPinExpiry) {
-      setCheckVpin(false);
+    if (!v_Pin) {
       if (!hasReloaded) {
-        // Only reload if it hasn't already
-        localStorage.setItem("hasReloaded", "true");
+        console.log("Reloading...");
+        setCheckVpin(false);
+        localStorage.setItem("hasReloaded", true);
         window.location.reload();
       }
-    } else if (v_Pin?.data) {
+    } else if (v_Pin) {
+      // console.log("Valid v_Pin detected.");
       setCheckVpin(true);
-      localStorage.removeItem("hasReloaded"); // Clear the flag if the pin is valid
+      localStorage.setItem("hasReloaded", false);
     }
 
     getAllPassword();
-  }, [v_Pin]);
+  }, []);
 
   // *Search Password
   const handelSearch = (value) => {

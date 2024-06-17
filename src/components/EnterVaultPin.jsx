@@ -3,10 +3,11 @@ import axios from "axios";
 import { Cookies } from "react-cookie";
 import { toast } from "react-hot-toast";
 import { MdErrorOutline } from "react-icons/md";
-import useVaultPinStore from "../Zustand/Vault_Pin";
+import JSCookies from "js-cookie";
+// import useVaultPinStore from "../Zustand/Vault_Pin";
 const EnterVaultPin = () => {
   const cookies = new Cookies();
-  const { updateV_Pin } = useVaultPinStore();
+  // const [cookie, setCookie, removeCookie] = useCookies(["cookie-name"]);
   const inputRefs = Array.from({ length: 6 }, () => useRef(null));
   const [vaultPin, setVaultPin] = useState("");
   const [error, setError] = useState(false);
@@ -23,7 +24,6 @@ const EnterVaultPin = () => {
     }).join("");
     setVaultPin(newVaultPin);
   };
-
   // Function to handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -46,12 +46,19 @@ const EnterVaultPin = () => {
         // console.log(response.data.message);
         // console.log(response.data.data);
         setError(false);
-        updateV_Pin({ data: response.data.data });
+        // console.log(response.data.data)
+        JSCookies.set("v_pin", response.data.data, {
+          expires: 1 / 48,
+          path: "/",
+          secure: true,
+          sameSite: "Strict",
+        });
+        // cookies.set("v_pin", response.data.data, options);
         window.location.reload();
         toast.success(response.data.message);
       })
       .catch(function (error) {
-        updateV_Pin({ data: null });
+        // cookies.set("v_pin", null);
         setErrorMessage(error.response.data.message);
         setError(true);
         console.log(error.response.data.message);

@@ -5,8 +5,8 @@ import { FaTrashAlt } from "react-icons/fa";
 import { FaEye } from "react-icons/fa";
 import { RxOpenInNewWindow } from "react-icons/rx";
 import CryptoJS from "crypto-js";
-import useVaultPinStore from "../Zustand/Vault_Pin";
 import { toast } from "react-hot-toast";
+import { useCookies } from "react-cookie";
 
 const EditPasswdUsername = ({
   isOpen,
@@ -21,7 +21,8 @@ const EditPasswdUsername = ({
     password: "",
     website: "",
   });
-  const { v_Pin } = useVaultPinStore();
+  const [cookies, setCookie, removeCookie] = useCookies(["cookie-name"]);
+  const v_Pin = cookies["v_pin"];
   const [showPasswd, setShowPasswd] = useState(false);
   const [text, setText] = useState("");
   useEffect(() => {
@@ -48,7 +49,7 @@ const EditPasswdUsername = ({
     setShowPasswd((prev) => !prev);
     if (!showPasswd) {
       const decode = CryptoJS.AES.decrypt(
-        v_Pin.data,
+        v_Pin,
         import.meta.env.VITE_SECUREPIN
       ).toString(CryptoJS.enc.Utf8);
       const decodePasswd = CryptoJS.AES.decrypt(

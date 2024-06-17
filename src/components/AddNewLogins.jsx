@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import { FaArrowsRotate } from "react-icons/fa6";
 import axios from "axios";
 import { toast } from "react-hot-toast";
-import saveNewLoginsStore from "../Zustand/AddNewLoginDetails";
 const AddNewLogins = ({ isOpen, onClose, onConfirm }) => {
   const [formData, setFormData] = useState({
     username: "",
@@ -11,7 +10,6 @@ const AddNewLogins = ({ isOpen, onClose, onConfirm }) => {
   });
 
   const [loader, setLoader] = useState(false);
-  const { updateNewLoginDetails } = saveNewLoginsStore();
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prevData) => ({
@@ -26,7 +24,7 @@ const AddNewLogins = ({ isOpen, onClose, onConfirm }) => {
       const response = await axios.post(
         `${import.meta.env.VITE_BACKEND_URL}/api/passwordVault/generatePasswd`,
         {
-          capital: "cap",
+          capital: "capital",
           length: 14,
           small: "small",
           special: "special",

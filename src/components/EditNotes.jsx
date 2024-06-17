@@ -1,16 +1,17 @@
 import React, { useEffect, useState } from "react";
 import { FaTrashAlt } from "react-icons/fa";
-import useVaultPinStore from "../Zustand/Vault_Pin";
 import { toast } from "react-hot-toast";
 import axios from "axios";
 import { CiUnlock } from "react-icons/ci";
+import { useCookies } from "react-cookie";
 const EditNotes = ({ isOpen, onClose, onConfirm, onTrash, onUserData }) => {
   const [formData, setFormData] = useState({
     name: "",
     note: "",
     favorite: false,
   });
-  const { v_Pin } = useVaultPinStore();
+  const [cookies, setCookie, removeCookie] = useCookies(["cookie-name"]);
+  const v_Pin = cookies["v_pin"];
   const [viewNote, setViewNote] = useState(false);
   const [viewNoteLoader, setViewNoteLoader] = useState(false);
   const handleChange = (e) => {
@@ -61,7 +62,7 @@ const EditNotes = ({ isOpen, onClose, onConfirm, onTrash, onUserData }) => {
             withCredentials: true,
             credentials: "include",
             headers: {
-              Authorization: `Bearer ${v_Pin.data}`,
+              Authorization: `Bearer ${v_Pin}`,
             },
           }
         );

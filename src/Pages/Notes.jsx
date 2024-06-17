@@ -31,16 +31,19 @@ import { IoSettingsOutline } from "react-icons/io5";
 import { FaSearch } from "react-icons/fa";
 import { IoMdAdd } from "react-icons/io";
 import EnterVaultPin from "../components/EnterVaultPin";
-import useVaultPinStore from "../Zustand/Vault_Pin";
+// import useVaultPinStore from "../Zustand/Vault_Pin";
 import NoteSkeletonLoader from "../components/NoteSkeletonLoader";
 import AddNewNotes from "../components/AddNewNotes";
 import EditNotes from "../components/EditNotes";
 import { CiStickyNote } from "react-icons/ci";
 import { FaRegStar } from "react-icons/fa";
 import { FaStar } from "react-icons/fa";
+import { useCookies } from "react-cookie";
 const Notes = () => {
   const Profile = JSON.parse(localStorage.getItem("profile"));
-  const { v_Pin } = useVaultPinStore();
+  // const { v_Pin } = useVaultPinStore();
+  const [cookies, setCookie, removeCookie] = useCookies(["cookie-name"]);
+  const v_Pin = cookies["v_pin"];
   const [loader, setLoader] = useState(false);
   const [editNotes, setEditNotes] = useState(false);
   const [addNewNotes, setAddNewNotes] = useState(false);
@@ -57,7 +60,7 @@ const Notes = () => {
         withCredentials: true,
         credentials: "include",
         headers: {
-          Authorization: `Bearer ${v_Pin.data}`,
+          Authorization: `Bearer ${v_Pin}`,
         },
       })
       .then(function (response) {
@@ -90,7 +93,7 @@ const Notes = () => {
           withCredentials: true,
           credentials: "include",
           headers: {
-            Authorization: `Bearer ${v_Pin.data}`,
+            Authorization: `Bearer ${v_Pin}`,
           },
         }
       );
@@ -123,7 +126,7 @@ const Notes = () => {
           withCredentials: true,
           credentials: "include",
           headers: {
-            Authorization: `Bearer ${v_Pin.data}`,
+            Authorization: `Bearer ${v_Pin}`,
           },
         }
       );
@@ -161,7 +164,7 @@ const Notes = () => {
           withCredentials: true,
           credentials: "include",
           headers: {
-            Authorization: `Bearer ${v_Pin.data}`,
+            Authorization: `Bearer ${v_Pin}`,
           },
         }
       );
@@ -183,24 +186,27 @@ const Notes = () => {
   };
   //* refresh all Note
   useEffect(() => {
-    const vPinExpiry = v_Pin?.expiry; // Extract expiry time from v_Pin
-    const currentTime = Date.now();
-    const hasReloaded = localStorage.getItem("hasReloaded"); // Get reload flag from localStorage
+    // console.log("Running useEffect...");
+    const hasReloaded = localStorage.getItem("hasReloaded");
+    // console.log("hasReloaded:", hasReloaded);
+    // console.log("v_Pin:", v_Pin);
 
-    if (currentTime > vPinExpiry) {
-      setCheckVpin(false);
+    if (!v_Pin) {
       if (!hasReloaded) {
-        // Only reload if it hasn't already
-        localStorage.setItem("hasReloaded", "true");
+        console.log("Reloading...");
+        setCheckVpin(false);
+        localStorage.setItem("hasReloaded", true);
         window.location.reload();
       }
-    } else if (v_Pin?.data) {
+    } else if (v_Pin) {
+      // console.log("Valid v_Pin detected.");
       setCheckVpin(true);
-      localStorage.removeItem("hasReloaded"); // Clear the flag if the pin is valid
+      localStorage.setItem("hasReloaded", false);
     }
 
     getAllNote();
-  }, [v_Pin]); // Add hasReloaded to the dependency array
+  }, []);
+  // Add hasReloaded to the dependency array
   //* Search Note
   const handelSearch = (value) => {
     if (!value) {
@@ -224,7 +230,7 @@ const Notes = () => {
             withCredentials: true,
             credentials: "include",
             headers: {
-              Authorization: `Bearer ${v_Pin.data}`,
+              Authorization: `Bearer ${v_Pin}`,
             },
           }
         );
@@ -287,9 +293,9 @@ const Notes = () => {
                 <p className=" uppercase font-semibold">Filters</p>
                 <div onClick={handleFavorite}>
                   {isfavorite ? (
-                    <FaRegStar className=" text-lg cursor-pointer" />
-                  ) : (
                     <FaStar className=" text-lg cursor-pointer" />
+                  ) : (
+                    <FaRegStar className=" text-lg cursor-pointer" />
                   )}
                 </div>
               </div>
