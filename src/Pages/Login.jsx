@@ -136,7 +136,7 @@ const Login = () => {
               className={` mt-3 p-2 w-7/12 rounded-full text-center text-[#BFAFF2] border border-[#BFAFF2]  ${
                 loading ? " cursor-not-allowed" : " cursor-pointer"
               }`}
-              href="/register"
+              to="/register"
             >
               Registration
             </Link>

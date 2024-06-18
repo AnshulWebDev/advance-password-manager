@@ -67,7 +67,7 @@ const Register = () => {
         <title>Register</title>
         <meta name="description" content="Cipher Guard Register page." />
       </Helmet>
-      <div className=" mx-auto w-9/12 h-4/5 shadow-lgrounded-xl">
+      <div className=" mx-auto w-9/12 h-4/5 shadow-lg rounded-xl">
         <div className="flex h-full">
           {/* Left side */}
           <div className="hidden rounded-tl-2xl rounded-bl-2xl w-3/5 bg-[#2B2B2B] shadow-lg lg:flex flex-col justify-center items-center">
@@ -172,7 +172,7 @@ const Register = () => {
             <div>Aready have account?</div>
             <Link
               className=" mt-3 p-2 w-7/12 rounded-full text-center text-[#BFAFF2] border border-[#BFAFF2] cursor-pointer"
-              href="/login"
+              to="/login"
             >
               Login
             </Link>
