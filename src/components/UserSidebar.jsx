@@ -56,6 +56,7 @@ export const Sidebar = ({ children }) => {
     // Close the modal and perform logout
     setLogoutModalOpen(false);
     cookies.remove("token");
+    cookies.remove("v_pin");
     localStorage.removeItem("token");
     localStorage.removeItem("profile");
     toast.success("Loggout");
@@ -169,25 +170,24 @@ export const MobileSideBar = ({ items }) => {
   const navigate = useNavigate();
   const cookies = new Cookies();
   const [isLogoutModalOpen, setLogoutModalOpen] = useState(false);
-  const Profile =
-    JSON.parse(localStorage.getItem("profile"));
-    const logoutHandler = () => {
-      setLogoutModalOpen(true);
-    };
-    const handleLogoutConfirm = () => {
-      // Close the modal and perform logout
-      setLogoutModalOpen(false);
-      cookies.remove("token");
-      localStorage.removeItem("token");
-      localStorage.removeItem("profile");
-      toast.success("Loggout");
-      navigate("/");
-    };
-  
-    const handleLogoutCancel = () => {
-      // Close the modal without logging out
-      setLogoutModalOpen(false);
-    };
+  const Profile = JSON.parse(localStorage.getItem("profile"));
+  const logoutHandler = () => {
+    setLogoutModalOpen(true);
+  };
+  const handleLogoutConfirm = () => {
+    // Close the modal and perform logout
+    setLogoutModalOpen(false);
+    cookies.remove("token");
+    localStorage.removeItem("token");
+    localStorage.removeItem("profile");
+    toast.success("Loggout");
+    navigate("/");
+  };
+
+  const handleLogoutCancel = () => {
+    // Close the modal without logging out
+    setLogoutModalOpen(false);
+  };
   return (
     <aside className="h-screen  ">
       <nav className="h-full flex md:hidden flex-col shadow-sm">

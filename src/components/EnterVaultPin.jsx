@@ -4,10 +4,10 @@ import { Cookies } from "react-cookie";
 import { toast } from "react-hot-toast";
 import { MdErrorOutline } from "react-icons/md";
 import JSCookies from "js-cookie";
+import { Link } from "react-router-dom";
 // import useVaultPinStore from "../Zustand/Vault_Pin";
 const EnterVaultPin = () => {
   const cookies = new Cookies();
-  // const [cookie, setCookie, removeCookie] = useCookies(["cookie-name"]);
   const inputRefs = Array.from({ length: 6 }, () => useRef(null));
   const [vaultPin, setVaultPin] = useState("");
   const [error, setError] = useState(false);
@@ -43,17 +43,13 @@ const EnterVaultPin = () => {
         }
       )
       .then(function (response) {
-        // console.log(response.data.message);
-        // console.log(response.data.data);
         setError(false);
-        // console.log(response.data.data)
         JSCookies.set("v_pin", response.data.data, {
           expires: 1 / 48,
           path: "/",
           secure: true,
           sameSite: "Strict",
         });
-        // cookies.set("v_pin", response.data.data, options);
         window.location.reload();
         toast.success(response.data.message);
       })
@@ -61,9 +57,7 @@ const EnterVaultPin = () => {
         // cookies.set("v_pin", null);
         setErrorMessage(error.response.data.message);
         setError(true);
-        console.log(error.response.data.message);
       });
-    // Perform any necessary action with the vault pin
   };
 
   return (
@@ -98,6 +92,12 @@ const EnterVaultPin = () => {
         >
           Go
         </button>
+        <Link to={"/settings/create-vault-pin"}
+          className="border w-fit px-3 py-1 rounded-lg bg-white text-black"
+        >
+          Create New
+        </Link>
+        
       </div>
     </div>
   );

@@ -45,6 +45,8 @@ const Generator = () => {
   });
   const [uniquePassword, setUniquePasswd] = useState("");
   const [loader, setLoader] = useState(false);
+  const [usernameloader, setUsernameLoader] = useState(false);
+  const [username, setUsername] = useState("");
   const handleCheckedChange = (e) => {
     const { name, checked } = e.target;
     setFormData((prevData) => ({
@@ -92,7 +94,27 @@ const Generator = () => {
     }
   };
 
-  // Copy to clipboard
+  const generateUsername = async () => {
+    setUsernameLoader(true);
+    try {
+      const response = await axios.post(
+        `${
+          import.meta.env.VITE_BACKEND_URL
+        }/api/passwordVault/generateUsername`,
+        "",
+        {
+          withCredentials: true,
+          credentials: "include",
+        }
+      );
+      setUsername(response.data.data);
+      setUsernameLoader(false);
+    } catch (error) {
+      setUsernameLoader(false);
+      toast.error(error.response.data.message || "An error occurred");
+    }
+  };
+  //* Copy to clipboard
   const passwordCopyToClipboard = async () => {
     try {
       await navigator.clipboard.writeText(uniquePassword);
@@ -101,9 +123,15 @@ const Generator = () => {
       toast.error("Failed to copy");
     }
   };
-
+  const usernameCopyToClipboard = async () => {
+    try {
+      await navigator.clipboard.writeText(username);
+      toast.success("Password copied");
+    } catch (err) {
+      toast.error("Failed to copy");
+    }
+  };
   const Profile = JSON.parse(localStorage.getItem("profile"));
-  console.log(formData);
   return (
     <main className="flex h-screen overflow-hidden pr-4 py-4 bg-black">
       <Helmet>
@@ -143,14 +171,14 @@ const Generator = () => {
 
       {/* main content */}
       <main className="w-full bg-white rounded-3xl p-4">
-        <div className="flex gap-4 flex-wrap justify-center">
+        <div className="flex gap-4 flex-wrap justify-center items-center">
           {/* Password generator */}
           <div className="min-w-56 w-1/2 border border-neutral-500 rounded-md p-4">
             <p className="text-center uppercase text-xl font-medium mb-3">
               Password
             </p>
             <div className="">
-              <div className="flex justify-between border border-neutral-500 rounded-md py-2 px-2.5">
+              <div className="flex justify-between items-center border border-neutral-500 rounded-md py-2 px-2.5">
                 <p className="w-fit truncate overflow-hidden">
                   {uniquePassword}
                 </p>
@@ -229,9 +257,31 @@ const Generator = () => {
               </div>
             </div>
           </div>
+
           {/* Username generator */}
           <div className="min-w-56 w-1/2 border border-neutral-500 rounded-md p-4">
-            box2
+            <div className="text-center uppercase text-xl font-medium mb-3">
+              Username
+            </div>
+            <div>
+              <div className="flex justify-between items-center border border-neutral-500 rounded-md py-2 px-2.5">
+                <p className="w-fit truncate overflow-hidden">{username}</p>
+                <div className=" w-fit flex gap-2 items-center">
+                  <MdOutlineContentCopy
+                    onClick={usernameCopyToClipboard}
+                    className="w-7 h-7 cursor-pointer"
+                  />
+                  {usernameloader ? (
+                    <div className="spinner bg-black mx-auto"></div>
+                  ) : (
+                    <FaArrowsRotate
+                      onClick={generateUsername}
+                      className="w-7 h-7 cursor-pointer"
+                    />
+                  )}
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </main>

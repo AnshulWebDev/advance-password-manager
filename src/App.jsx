@@ -21,6 +21,7 @@ import Notes from "./Pages/Notes";
 import Settings from "./Pages/Settings";
 import Generator from "./Pages/Generator";
 import Vault from "./Pages/Vault";
+import CreateNewVaultPin from "./Pages/CreateNewVaultPin";
 const App = () => {
   return (
     <HelmetProvider>
@@ -41,6 +42,10 @@ const App = () => {
         <Route path="/notes" element={<Auth Component={Notes} />} />
         <Route path="/generator" element={<Auth Component={Generator} />} />
         <Route path="/settings" element={<Auth Component={Settings} />} />
+        <Route
+          path="/settings/create-vault-pin"
+          element={<Auth Component={CreateNewVaultPin} />}
+        />
 
         {/* Admin Routes */}
         <Route
@@ -67,6 +72,8 @@ const App = () => {
           path="/admin/setting"
           element={<AdminAuth Component={AdminSetting} />}
         />
+
+        {/* Page Not found */}
         <Route path="*" element={<PageNotFound />} />
       </Routes>
     </HelmetProvider>
