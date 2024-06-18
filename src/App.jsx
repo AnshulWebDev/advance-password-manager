@@ -22,11 +22,17 @@ import Settings from "./Pages/Settings";
 import Generator from "./Pages/Generator";
 import Vault from "./Pages/Vault";
 import CreateNewVaultPin from "./Pages/CreateNewVaultPin";
+import CookiesPolicy from "./Pages/CookiesPolicy";
+import TermsofUse from "./Pages/TermsofUse";
 const App = () => {
   return (
     <HelmetProvider>
       <Routes>
         <Route path="/" element={<Main />} />
+        <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+        <Route path="/cookies-policy" element={<CookiesPolicy />} />
+        <Route path="/terms-of-use" element={<TermsofUse />} />
+
         <Route path="/login" element={<PreventLogin Component={Login} />} />
         <Route
           path="/register"
@@ -36,7 +42,7 @@ const App = () => {
           path="/register/otpverify"
           element={<EmailOtpDetect Component={EmailVerify} />}
         />
-        <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+
         {/* User Routes */}
         <Route path="/vault" element={<Auth Component={Vault} />} />
         <Route path="/notes" element={<Auth Component={Notes} />} />

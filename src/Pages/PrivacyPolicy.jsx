@@ -6,7 +6,7 @@ const PrivacyPolicy = () => {
     <div className="bg-[#2B2B2B] md:px-24 px-8 h-full text-neutral-500">
       <Helmet>
         <title>CipherGuard - Privacy Policy</title>
-        <meta name="description" content="Cipher Guard Login page." />
+        <meta name="description" content="Cipher Guard Privacy Policy page." />
       </Helmet>
       <Navbar />
       <div className=" flex flex-col gap-3 mt-5">
@@ -114,11 +114,11 @@ const PrivacyPolicy = () => {
             <p>
               <strong>Website</strong> refers to CipherGuard, accessible from{" "}
               <a
-                href="https://cipherguard.devglimpse.com"
+                href="https://cipherguard.cleverpentester.com"
                 rel="external nofollow noopener"
                 target="_blank"
               >
-                https://cipherguard.devglimpse.com
+                https://cipherguard.cleverpentester.com
               </a>
             </p>
           </li>
@@ -551,7 +551,9 @@ const PrivacyPolicy = () => {
         <ul>
           <li>
             By email:{" "}
-            <a href="mailto:admin@devglimpse.com">admin@devglimpse.com</a>
+            <a href="mailto:support@cleverpentester.com">
+              support@cleverpentester.com
+            </a>
           </li>
         </ul>
       </div>
